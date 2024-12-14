@@ -52,7 +52,7 @@
       <children>
             <ImageView fitHeight="400.0" fitWidth="628.0" layoutX="-214.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@cover.jpg" />
+                  <Image url="@cover.jpeg" />
                </image>
             </ImageView>
             <AnchorPane layoutX="246.4" prefHeight="400.0" prefWidth="394.0" style="-fx-background-color: #ddd;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
