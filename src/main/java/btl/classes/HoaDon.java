@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class HoaDon {
     private int maHD;
     private int maPhong;

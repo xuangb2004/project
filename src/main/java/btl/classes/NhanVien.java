@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class NhanVien {
     private int maNV;
     private String tenNV;

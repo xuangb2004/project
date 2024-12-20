@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class CaLamViec {
     private int maCLV;
     private String tenCLV;

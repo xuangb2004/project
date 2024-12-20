@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class LoaiDV {
     private String maLoaiDV;
     private String tenLoaiDV;

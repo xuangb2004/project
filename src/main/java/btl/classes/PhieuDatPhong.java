@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class PhieuDatPhong {
     private int maPDP;
     private int maPhong;

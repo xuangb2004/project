@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class DichVu {
     private String maDV;
     private String tenDV;

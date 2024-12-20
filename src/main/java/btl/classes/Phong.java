@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class Phong {
     private int maPhong;
     private String tenPhong;

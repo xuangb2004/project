@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class Khach {
     private int maKhach;
     private String tenKhach;

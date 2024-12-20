@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class PhieuDV {
     private int maPhieuDV;
     private int maPhong;

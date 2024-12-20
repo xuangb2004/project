@@ -1,3 +1,5 @@
+package btl.classes;
+
 public class LoaiPhong {
     private String maLP;
     private String tenLoaiPhong;
