@@ -2,7 +2,7 @@ package btl.project;
 
 import java.io.IOException;
 
-import btl.project.User.Role;
+import btl.classes.TaiKhoan.Role;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;

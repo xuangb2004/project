@@ -8,4 +8,5 @@ module btl.project {
     opens btl.project to javafx.fxml;
 
     exports btl.project;
+    exports btl.classes;
 }
