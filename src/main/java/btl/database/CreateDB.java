@@ -1,8 +1,13 @@
 package btl.database;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
 public class CreateDB {
@@ -25,8 +30,10 @@ public class CreateDB {
             JOptionPane.showMessageDialog(null, databaseName + " Database has been created successfully",
                     "System Message", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (HeadlessException | SQLException e) {
+            Logger.getLogger(CreateDB.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(null, "Error creating database: " + e.getMessage(),
+                    "System Message", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
