@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="712.0" prefWidth="924.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl.project.HoaDonDetails">
+   <children>
+      <AnchorPane AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="TOP_CENTER" prefHeight="46.0" prefWidth="924.0" style="-fx-background-color: #e96151;" text="Chi tiết Hóa Đơn" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="2.0" layoutY="132.0" prefHeight="616.0" prefWidth="922.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="132.0">
+         <children>
+            <TabPane prefHeight="582.0" prefWidth="922.0">
+               <tabs>
+                  <Tab fx:id="tab_RoomDetails" closable="false" text="Chi tiết Phòng">
+                     <content>
+                        <TableView fx:id="tbl_RoomDetails" prefHeight="558.0" prefWidth="922.0">
+                           <columns>
+                              <TableColumn fx:id="tb_TenPhong" prefWidth="121.33334350585938" text="Phòng" />
+                              <TableColumn fx:id="tb_QName" prefWidth="176.6666717529297" text="Khách hàng" />
+                              <TableColumn fx:id="tb_RoomPrice" prefWidth="140.66665649414062" text="Giá Phòng" />
+                              <TableColumn fx:id="tb_MoneyPaid" prefWidth="158.3333740234375" text="Tiền Trả" />
+                              <TableColumn fx:id="tb_NgayDatPhong" prefWidth="159.6666259765625" text="Ngày Đặt" />
+                              <TableColumn fx:id="tb_NgayTraPhong" prefWidth="165.3333740234375" text="Ngày Trả" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tab_ServicesDetails" closable="false" text="Chi tiết sử dụng Dịch Vụ">
+                     <content>
+                        <TableView fx:id="tbl_DVDetails" prefHeight="587.0" prefWidth="1314.0">
+                           <columns>
+                              <TableColumn fx:id="tb_tenDV" prefWidth="145.99999237060547" text="Dịch Vụ" />
+                              <TableColumn fx:id="tb_LoaiDV" prefWidth="139.66665649414062" text="Loại DV" />
+                              <TableColumn fx:id="tb_DVPrice" prefWidth="132.33334350585938" text="Đơn giá " />
+                              <TableColumn fx:id="tb_SL" prefWidth="91.66665649414062" text="Số lượng" />
+                              <TableColumn fx:id="tb_TongTienDV" prefWidth="170.3333740234375" text="Tổng tiền" />
+                              <TableColumn fx:id="tb_DateUsed" prefWidth="184.6666259765625" text="Ngày sử dụng" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <TextField fx:id="txtTienPhong" layoutX="110.0" layoutY="581.0" />
+            <Label layoutX="14.0" layoutY="585.0" text="Tiền trả phòng :" />
+            <TextField fx:id="txtTienDV" layoutX="387.0" layoutY="581.0" />
+            <Label layoutX="303.0" layoutY="585.0" text="Tiền dịch vụ :" />
+            <TextField fx:id="txtTongTien" layoutX="699.0" layoutY="581.0" />
+            <Label layoutX="611.0" layoutY="585.0" text="Tổng tiền :" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="1.0" layoutY="44.0" prefHeight="88.0" prefWidth="922.0" AnchorPane.bottomAnchor="618.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="44.0">
+         <children>
+            <DatePicker fx:id="dtpFromDate" layoutX="151.0" layoutY="34.0" />
+            <DatePicker fx:id="dtpToDate" layoutX="448.0" layoutY="33.0" />
+            <Button layoutX="652.0" layoutY="32.0" mnemonicParsing="false" onAction="#PressInHD" prefHeight="26.0" prefWidth="120.0" text="In hóa đơn">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button layoutX="788.0" layoutY="32.0" mnemonicParsing="false" onAction="#PressCancel" prefHeight="26.0" prefWidth="120.0" text="Hủy">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="82.0" layoutY="35.0" text="Từ ngày:">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="370.0" layoutY="35.0" text="Đến ngày:">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
