@@ -22,10 +22,10 @@ public class LoginController {
   private void signIn() throws IOException {
     if (username.getText().equals("admin") && password.getText().equals("admin")) {
       role = Role.ADMIN;
-      App.setRoot("QL_NV");
+      App.setRoot("auth");
     } else if (username.getText().equals("hotel") && password.getText().equals("hotel")) {
       role = Role.HOTEL;
-      App.setRoot("auth");
+      App.setRoot("hotel");
     } else if (username.getText().equals("guest") && password.getText().equals("guest")) {
       role = Role.GUEST;
       App.setRoot("auth");
