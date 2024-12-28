@@ -16,11 +16,12 @@ public class NhanVien {
     private String hinhAnh;
     private int maCLV;
     private int maCV;
+    private int stt;
 
     // Constructor đầy đủ
     public NhanVien(int maNV, String tenNV, String ngaySinh, String cmnd, String sdt, double luongCoBan,
-                    String trangThai, String gioiTinh, String user, String password, String email,
-                    String ngayGiaNhap, String hinhAnh, int maCLV, int maCV) {
+            String trangThai, String gioiTinh, String user, String password, String email,
+            String ngayGiaNhap, String hinhAnh, int maCLV, int maCV) {
         this.maNV = maNV;
         this.tenNV = tenNV;
         this.ngaySinh = ngaySinh;
@@ -36,6 +37,11 @@ public class NhanVien {
         this.hinhAnh = hinhAnh;
         this.maCLV = maCLV;
         this.maCV = maCV;
+    }
+
+    // Constructor mặc định
+    public NhanVien() {
+        // Để trống hoặc khởi tạo các giá trị mặc định nếu cần
     }
 
     // Getters và Setters
@@ -158,5 +164,13 @@ public class NhanVien {
     public void setMaCV(int maCV) {
         this.maCV = maCV;
     }
-}
 
+    public int getStt() {
+        return stt;
+    }
+
+    public void setStt(int stt) {
+        this.stt = stt;
+    }
+
+}

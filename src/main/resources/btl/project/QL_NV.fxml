@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+
+<AnchorPane maxWidth="1.7976931348623157E308" prefHeight="750.0" prefWidth="1320.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl.project.QL_NV">
+   <children>
+      <!-- Header -->
+      <AnchorPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="TOP_CENTER" prefHeight="46.0" prefWidth="1320.0" style="-fx-background-color: #e96151;" text="Quản Lý Nhân Viên" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+
+      <!-- Form nhập liệu -->
+      <AnchorPane layoutX="276.4000000000001" layoutY="51.0" prefHeight="204.0" prefWidth="1042.0">
+         <children>
+            <!-- Các trường thông tin cơ bản -->
+            <Label layoutX="46.0" layoutY="30.0" text="Mã Nhân viên:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtID_NV" disable="true" editable="false" layoutX="161.0" layoutY="26.0" />
+
+            <Label layoutX="40.0" layoutY="77.0" text="Tên Nhân viên:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtName_NV" layoutX="161.0" layoutY="73.0" />
+
+            <!-- Thêm các trường theo database -->
+            <Label layoutX="419.0" layoutY="33.0" text="Ngày Sinh:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="dtpWasBorn_NV" layoutX="512.0" layoutY="31.0" />
+
+            <!-- Thêm các trường còn lại -->
+            <Label layoutX="442.0" layoutY="124.0" text="CMND:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCMND_NV" layoutX="512.0" layoutY="121.0" onKeyTyped="#validateNumber" />
+
+            <!-- Buttons -->
+            <Button layoutX="382.0" layoutY="191.0" mnemonicParsing="false" onAction="#PressAdd" text="Thêm" />
+            <Button layoutX="543.0" layoutY="191.0" mnemonicParsing="false" onAction="#PressEdit" text="Sửa" />
+            <Button layoutX="701.0" layoutY="190.0" mnemonicParsing="false" onAction="#PressClear" text="Làm mới" />
+         </children>
+      </AnchorPane>
+
+      <!-- TableView -->
+      <AnchorPane layoutY="284.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <TableView fx:id="tblNV" onMouseClicked="#ShowInfoBacktoText">
+               <columns>
+                  <TableColumn fx:id="Index_table" text="STT" />
+                  <TableColumn fx:id="IDtable" text="Mã NV" />
+                  <TableColumn fx:id="NameNVtable" text="Tên NV" />
+                  <TableColumn fx:id="WasBorn_table" text="Ngày sinh" />
+                  <TableColumn fx:id="CMND_table" text="CMND" />
+                  <TableColumn fx:id="SDT_table" text="SDT" />
+                  <TableColumn fx:id="Email_table" text="Email" />
+                  <TableColumn fx:id="Role_table" text="Chức vụ" />
+                  <TableColumn fx:id="Salary_table" text="Lương" />
+                  <TableColumn fx:id="Join_table" text="Ngày Gia Nhập" />
+                  <TableColumn fx:id="TenCLV_table" text="Ca làm việc" />
+                  <TableColumn fx:id="Status_table" text="Trạng Thái" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+
+      <!-- Search box -->
+      <TextField fx:id="txtSearch" layoutX="16.0" layoutY="268.0" onKeyTyped="#SearchNV" promptText="Search">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </TextField>
+   </children>
+</AnchorPane>

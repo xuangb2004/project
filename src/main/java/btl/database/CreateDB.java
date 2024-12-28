@@ -16,9 +16,9 @@ public class CreateDB {
         try {
             String url = "jdbc:mysql://localhost:3306/";
 
-            String databaseName = "HotelManagementDB";
+            String databaseName = "hotelmanagementdb";
             String userName = "root";
-            String password = "123456";
+            String password = "pass";
 
             Connection connection = DriverManager.getConnection(url, userName, password);
 
