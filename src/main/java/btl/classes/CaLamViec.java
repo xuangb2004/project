@@ -5,8 +5,7 @@ public class CaLamViec {
     private String tenCLV;
     private String gioBatDau;
     private String gioKetThuc;
-
-    // Constructor đầy đủ
+    
     public CaLamViec(int maCLV, String tenCLV, String gioBatDau, String gioKetThuc) {
         this.maCLV = maCLV;
         this.tenCLV = tenCLV;
