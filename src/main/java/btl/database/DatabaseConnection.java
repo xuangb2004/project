@@ -1,8 +1,8 @@
 package btl.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+
+import java.sql.*;
 
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/hotelmanagementdb";
@@ -10,6 +10,8 @@ public class DatabaseConnection {
     private static final String PASSWORD = "pass";
 
     private static Connection connection;
+    public Statement stmt;
+    public ResultSet rs;
 
     public static Connection getConnection() {
         if (connection == null) {
@@ -33,4 +35,5 @@ public class DatabaseConnection {
             }
         }
     }
+
 }

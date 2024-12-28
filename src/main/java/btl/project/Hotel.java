@@ -14,7 +14,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import btl.ClassData.*;
+import btl.classes.*;
 
 import javax.swing.*;
 import javax.xml.stream.XMLReporter;

@@ -3,6 +3,7 @@ module btl.project {
     requires java.sql;
     requires javafx.controls;
     requires javafx.fxml;
+
     requires transitive javafx.graphics;
 
     opens btl.project to javafx.fxml;

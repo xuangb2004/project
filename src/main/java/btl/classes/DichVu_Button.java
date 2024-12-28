@@ -1,4 +1,4 @@
-package btl.ClassData;
+package btl.classes;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;

@@ -15,7 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import btl.ClassData.*;
+import btl.classes.*;
 
 import java.awt.*;
 import java.io.IOException;

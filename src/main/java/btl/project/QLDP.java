@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import btl.ClassData.*;
+import btl.classes.*;
 
 import javax.swing.*;
 import java.math.BigDecimal;

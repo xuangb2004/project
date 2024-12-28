@@ -1,7 +1,8 @@
-package btl.ClassData;
+package btl.classes;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import javax.swing.JOptionPane;
 
 public class ConnectionDB {
     private String url;
@@ -17,7 +18,7 @@ public class ConnectionDB {
         driverName = "com.mysql.cj.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/hotelmanagementdb";
         username = "root";
-        password = "tung1001";
+        password = "pass";
 
         Class.forName(driverName);
         conn = DriverManager.getConnection(url, username, password);

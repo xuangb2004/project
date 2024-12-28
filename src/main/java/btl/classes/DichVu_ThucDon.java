@@ -1,4 +1,4 @@
-package btl.ClassData;
+package btl.classes;
 
 import java.math.BigDecimal;
 
