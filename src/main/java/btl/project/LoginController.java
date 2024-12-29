@@ -40,9 +40,9 @@ public class LoginController {
     switch (loginState) {
       case 0 -> {
         switch (getRole()) {
-          case Role.ADMIN -> App.setRoot("auth");
+          case Role.ADMIN -> App.setRoot("admin");
           case Role.HOTEL -> App.setRoot("hotel");
-          case Role.GUEST -> App.setRoot("auth");
+          case Role.GUEST -> App.setRoot("guest");
         }
       }
       default -> {

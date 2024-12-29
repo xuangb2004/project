@@ -112,7 +112,7 @@ public class QL_NV {
         CMND_table.setCellValueFactory(new PropertyValueFactory<>("cmnd"));
         SDT_table.setCellValueFactory(new PropertyValueFactory<>("sdt"));
         Email_table.setCellValueFactory(new PropertyValueFactory<>("email"));
-        Role_table.setCellValueFactory(new PropertyValueFactory<>("tenCV"));
+        Role_table.setCellValueFactory(new PropertyValueFactory<>("tenChucVu"));
         Salary_table.setCellValueFactory(new PropertyValueFactory<>("luongCoBan"));
         Join_table.setCellValueFactory(new PropertyValueFactory<>("ngayGiaNhap"));
         TenCLV_table.setCellValueFactory(new PropertyValueFactory<>("tenCLV"));
@@ -121,7 +121,7 @@ public class QL_NV {
 
     private void loadEmployees() {
         try {
-            String sql = "SELECT nv.*, cv.TenCV, clv.TenCLV " +
+            String sql = "SELECT nv.*, cv.TenChucVu, clv.TenCLV " +
                     "FROM nhanvien nv " +
                     "LEFT JOIN chucvu cv ON nv.MaCV = cv.MaCV " +
                     "LEFT JOIN calamviec clv ON nv.MaCLV = clv.MaCLV";
@@ -142,8 +142,11 @@ public class QL_NV {
                 nv.setTrangThai(rs.getString("TrangThai"));
                 nv.setGioiTinh(rs.getString("GioiTinh"));
                 nv.setEmail(rs.getString("Email"));
+                nv.setNgayGiaNhap(rs.getDate("NgayGiaNhap"));
                 nv.setMaCLV(rs.getInt("MaCLV"));
                 nv.setMaCV(rs.getInt("MaCV"));
+                nv.setTenChucVu(rs.getString("TenChucVu"));
+                nv.setTenCLV(rs.getString("TenCLV"));
                 list.add(nv);
             }
             nhanVienList = list;
@@ -151,6 +154,22 @@ public class QL_NV {
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Lỗi tải dữ liệu", e.getMessage());
+        }
+    }
+
+    private int generateNextId() {
+        try {
+            String sql = "SELECT MAX(MaNV) as MaxId FROM nhanvien";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("MaxId") + 1;
+            }
+            return 1; // Nếu chưa có nhân viên nào
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể tạo mã nhân viên mới");
+            return -1;
         }
     }
 
@@ -163,7 +182,7 @@ public class QL_NV {
 
             ObservableList<String> cvList = FXCollections.observableArrayList();
             while (rsCV.next()) {
-                cvList.add(rsCV.getString("TenCV"));
+                cvList.add(rsCV.getString("tenChucVu"));
             }
             cbxCV.setItems(cvList);
 
@@ -203,10 +222,19 @@ public class QL_NV {
     @FXML
     void PressAdd(ActionEvent event) {
         if (validateInput()) {
-            NhanVien nv = getNhanVienFromInput();
-            saveNhanVien(nv);
-            loadEmployees();
-            clearForm();
+            try {
+                int newId = generateNextId();
+                if (newId > 0) {
+                    txtID_NV.setText(String.valueOf(newId));
+                    NhanVien nv = getNhanVienFromInput();
+                    saveNhanVien(nv);
+                    loadEmployees();
+                    clearForm();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Lỗi", "Không thể thêm nhân viên: " + e.getMessage());
+            }
         }
     }
 
@@ -261,12 +289,12 @@ public class QL_NV {
     private void setComboBoxValues(NhanVien nv) {
         try {
             // Set chức vụ
-            String sqlCV = "SELECT TenCV FROM chucvu WHERE MaCV = ?";
+            String sqlCV = "SELECT tenChucVu FROM chucvu WHERE MaCV = ?";
             PreparedStatement stmtCV = conn.prepareStatement(sqlCV);
             stmtCV.setInt(1, nv.getMaCV());
             ResultSet rsCV = stmtCV.executeQuery();
             if (rsCV.next()) {
-                cbxCV.setValue(rsCV.getString("TenCV"));
+                cbxCV.setValue(rsCV.getString("tenChucVu"));
             }
 
             // Set ca làm việc
@@ -323,25 +351,26 @@ public class QL_NV {
 
     private void saveNhanVien(NhanVien nv) {
         try {
-            String sql = "INSERT INTO nhanvien (TenNV, NgaySinh, CMND, SDT, LuongCoBan, TrangThai, GioiTinh, Email, NgayGiaNhap, MaCLV, MaCV) "
+            String sql = "INSERT INTO nhanvien (MaNV, TenNV, NgaySinh, CMND, SDT, LuongCoBan, TrangThai, GioiTinh, Email, NgayGiaNhap, MaCLV, MaCV) "
                     +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-
-            stmt.setString(1, nv.getTenNV());
-            stmt.setString(2, nv.getNgaySinh());
-            stmt.setString(3, nv.getCmnd());
-            stmt.setString(4, nv.getSdt());
-            stmt.setDouble(5, nv.getLuongCoBan());
-            stmt.setString(6, nv.getTrangThai());
-            stmt.setString(7, nv.getGioiTinh());
-            stmt.setString(8, nv.getEmail());
-            stmt.setString(9, LocalDate.now().toString());
+            stmt.setInt(1, nv.getMaNV());
+            stmt.setString(2, nv.getTenNV());
+            stmt.setString(3, nv.getNgaySinh());
+            stmt.setString(4, nv.getCmnd());
+            stmt.setString(5, nv.getSdt());
+            stmt.setDouble(6, nv.getLuongCoBan());
+            stmt.setString(7, nv.getTrangThai());
+            stmt.setString(8, nv.getGioiTinh());
+            stmt.setString(9, nv.getEmail());
             stmt.setInt(10, nv.getMaCLV());
             stmt.setInt(11, nv.getMaCV());
 
-            stmt.executeUpdate();
-            showAlert("Thông báo", "Thêm nhân viên thành công!");
+            int result = stmt.executeUpdate();
+            if (result > 0) {
+                showAlert("Thành công", "Thêm nhân viên thành công!");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Lỗi", "Không thể thêm nhân viên: " + e.getMessage());
@@ -439,11 +468,11 @@ public class QL_NV {
         return 0;
     }
 
-    private int getCVId(String tenCV) {
+    private int getCVId(String tenChucVu) {
         try {
-            String sql = "SELECT MaCV FROM chucvu WHERE TenCV = ?";
+            String sql = "SELECT MaCV FROM chucvu WHERE tenChucVu = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, tenCV);
+            stmt.setString(1, tenChucVu);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("MaCV");

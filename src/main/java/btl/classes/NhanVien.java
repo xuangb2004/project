@@ -1,6 +1,9 @@
 package btl.classes;
 
+import java.sql.Date;
+
 public class NhanVien {
+    private int stt;
     private int maNV;
     private String tenNV;
     private String ngaySinh;
@@ -9,42 +12,24 @@ public class NhanVien {
     private double luongCoBan;
     private String trangThai;
     private String gioiTinh;
-    private String user;
-    private String password;
     private String email;
-    private String ngayGiaNhap;
-    private String hinhAnh;
+    private Date ngayGiaNhap;
     private int maCLV;
     private int maCV;
-    private int stt;
+    private String tenChucVu;
+    private String tenCLV;
 
-    // Constructor đầy đủ
-    public NhanVien(int maNV, String tenNV, String ngaySinh, String cmnd, String sdt, double luongCoBan,
-            String trangThai, String gioiTinh, String user, String password, String email,
-            String ngayGiaNhap, String hinhAnh, int maCLV, int maCV) {
-        this.maNV = maNV;
-        this.tenNV = tenNV;
-        this.ngaySinh = ngaySinh;
-        this.cmnd = cmnd;
-        this.sdt = sdt;
-        this.luongCoBan = luongCoBan;
-        this.trangThai = trangThai;
-        this.gioiTinh = gioiTinh;
-        this.user = user;
-        this.password = password;
-        this.email = email;
-        this.ngayGiaNhap = ngayGiaNhap;
-        this.hinhAnh = hinhAnh;
-        this.maCLV = maCLV;
-        this.maCV = maCV;
-    }
-
-    // Constructor mặc định
     public NhanVien() {
-        // Để trống hoặc khởi tạo các giá trị mặc định nếu cần
     }
 
-    // Getters và Setters
+    public int getStt() {
+        return stt;
+    }
+
+    public void setStt(int stt) {
+        this.stt = stt;
+    }
+
     public int getMaNV() {
         return maNV;
     }
@@ -109,22 +94,6 @@ public class NhanVien {
         this.gioiTinh = gioiTinh;
     }
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -133,20 +102,12 @@ public class NhanVien {
         this.email = email;
     }
 
-    public String getNgayGiaNhap() {
+    public Date getNgayGiaNhap() {
         return ngayGiaNhap;
     }
 
-    public void setNgayGiaNhap(String ngayGiaNhap) {
+    public void setNgayGiaNhap(Date ngayGiaNhap) {
         this.ngayGiaNhap = ngayGiaNhap;
-    }
-
-    public String getHinhAnh() {
-        return hinhAnh;
-    }
-
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
     }
 
     public int getMaCLV() {
@@ -165,12 +126,19 @@ public class NhanVien {
         this.maCV = maCV;
     }
 
-    public int getStt() {
-        return stt;
+    public String getTenChucVu() {
+        return tenChucVu;
     }
 
-    public void setStt(int stt) {
-        this.stt = stt;
+    public void setTenChucVu(String tenChucVu) {
+        this.tenChucVu = tenChucVu;
     }
 
+    public String getTenCLV() {
+        return tenCLV;
+    }
+
+    public void setTenCLV(String tenCLV) {
+        this.tenCLV = tenCLV;
+    }
 }
