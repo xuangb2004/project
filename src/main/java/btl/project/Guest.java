@@ -1,8 +1,8 @@
 package btl.project;
 
 import btl.database.DatabaseConnection;
-import btl.ClassData.Phong;
-import btl.ClassData.PhieuDatPhong;
+import btl.classes.Phong;
+import btl.classes.PhieuDatPhong;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
