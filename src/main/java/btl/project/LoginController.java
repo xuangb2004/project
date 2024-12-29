@@ -3,6 +3,9 @@ package btl.project;
 import java.io.IOException;
 
 import btl.classes.TaiKhoan.Role;
+import static btl.classes.TaiKhoan.getRole;
+import btl.database.Auth;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -16,23 +19,37 @@ public class LoginController {
   @FXML
   private Text warning;
 
-  public static Role role;
+  @FXML
+  private void initialize() {
+    username.requestFocus();
+  }
 
   @FXML
-  private void signIn() throws IOException {
-    if (username.getText().equals("admin") && password.getText().equals("admin")) {
-      role = Role.ADMIN;
-      App.setRoot("QL_NV");
-    } else if (username.getText().equals("hotel") && password.getText().equals("hotel")) {
-      role = Role.HOTEL;
-      App.setRoot("hotel");
-    } else if (username.getText().equals("guest") && password.getText().equals("guest")) {
-      role = Role.GUEST;
-      App.setRoot("auth");
-    } else {
-      warning.setText("Tài khoản/mật khẩu không đúng");
-      username.clear();
-      password.clear();
+  private void nextField() {
+    password.requestFocus();
+  }
+
+  @FXML
+  private void goToRegister() throws IOException {
+    App.setRoot("register");
+  }
+
+  @FXML
+  private void signIn() throws IOException, Exception {
+    int loginState = Auth.login(username.getText(), password.getText());
+    switch (loginState) {
+      case 0 -> {
+        switch (getRole()) {
+          case Role.ADMIN -> App.setRoot("auth");
+          case Role.HOTEL -> App.setRoot("hotel");
+          case Role.GUEST -> App.setRoot("auth");
+        }
+      }
+      default -> {
+        warning.setText("Tài khoản/mật khẩu không đúng");
+      }
     }
+    username.clear();
+    password.clear();
   }
 }

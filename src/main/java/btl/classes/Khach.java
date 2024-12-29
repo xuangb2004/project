@@ -1,9 +1,12 @@
 package btl.classes;
 
+import java.sql.Date;
+
 public class Khach {
+    private int STT;
     private int maKhach;
     private String tenKhach;
-    private String ngaySinh;
+    private Date ngaySinh;
     private String sdt;
     private String cmnd;
     private String email;
@@ -11,7 +14,22 @@ public class Khach {
     private String gioiTinh;
 
     // Constructor đầy đủ
-    public Khach(int maKhach, String tenKhach, String ngaySinh, String sdt, String cmnd, String email, String quocTich, String gioiTinh) {
+    public Khach(int sTT, int maKhach, String tenKhach, String sdt, String email, String cmnd, String quocTich,
+            String gioiTinh, Date ngaySinh) {
+        STT = sTT;
+        this.maKhach = maKhach;
+        this.tenKhach = tenKhach;
+        this.ngaySinh = ngaySinh;
+        this.sdt = sdt;
+        this.cmnd = cmnd;
+        this.email = email;
+        this.quocTich = quocTich;
+        this.gioiTinh = gioiTinh;
+
+    }
+
+    public Khach(int maKhach, String tenKhach, Date ngaySinh, String sdt, String cmnd, String email, String quocTich,
+            String gioiTinh) {
         this.maKhach = maKhach;
         this.tenKhach = tenKhach;
         this.ngaySinh = ngaySinh;
@@ -22,7 +40,27 @@ public class Khach {
         this.gioiTinh = gioiTinh;
     }
 
+    public Khach(String tenKHACH, String SDT, String email, String CMND, String quocTich, String gioiTinh,
+            Date ngaySinh) {
+
+        this.tenKhach = tenKHACH;
+        this.ngaySinh = ngaySinh;
+        this.sdt = SDT;
+        this.cmnd = CMND;
+        this.email = email;
+        this.quocTich = quocTich;
+        this.gioiTinh = gioiTinh;
+    }
+
     // Getters và Setters
+    public int getSTT() {
+        return STT;
+    }
+
+    public void setSTT(int STT) {
+        this.STT = STT;
+    }
+
     public int getMaKhach() {
         return maKhach;
     }
@@ -39,11 +77,11 @@ public class Khach {
         this.tenKhach = tenKhach;
     }
 
-    public String getNgaySinh() {
+    public Date getNgaySinh() {
         return ngaySinh;
     }
 
-    public void setNgaySinh(String ngaySinh) {
+    public void setNgaySinh(Date ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
 

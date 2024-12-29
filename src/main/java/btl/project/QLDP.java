@@ -10,7 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import btl.ClassData.*;
+import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -238,7 +239,7 @@ public class QLDP {
         }
 
         int MaPDP = 0;
-        db.rs = db.stmt.executeQuery("Select COUNT(MaPhieuDP) as [Tổng] from [hotelmanagement].[dbo].[phieudatphong] ");
+        db.rs = db.stmt.executeQuery("SELECT COUNT(MaPhieuDP) AS Tong FROM phieudatphong  ");
         while (db.rs.next()) {
             MaPDP = db.rs.getInt("Tổng");
         }

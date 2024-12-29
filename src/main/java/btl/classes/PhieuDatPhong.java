@@ -1,90 +1,134 @@
 package btl.classes;
 
-public class PhieuDatPhong {
-    private int maPDP;
-    private int maPhong;
-    private int maKhach;
-    private int maNV;
-    private String ngayDatPhong;
-    private String traPhong;
-    private double donGiaThue;
-    private double donGiaPhong;
+import java.sql.Date; // Import the Date class
+import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 
-    // Constructor đầy đủ
-    public PhieuDatPhong(int maPDP, int maPhong, int maKhach, int maNV, String ngayDatPhong, String traPhong, double donGiaThue, double donGiaPhong) {
-        this.maPDP = maPDP;
-        this.maPhong = maPhong;
-        this.maKhach = maKhach;
-        this.maNV = maNV;
-        this.ngayDatPhong = ngayDatPhong;
-        this.traPhong = traPhong;
-        this.donGiaThue = donGiaThue;
-        this.donGiaPhong = donGiaPhong;
+public class PhieuDatPhong {
+    private int MaPDP;
+    private int MaP;
+    private String tenP;
+    private String maLP;
+    private String tenLP;
+    private int MaKHACH;
+    private String tenKHACH;
+    private Date NgayDatPhong;
+    private Date NgayTraPhong;
+    private String GiaPhong;
+    private String TienTra;
+
+    public PhieuDatPhong(int maPDP, int maP, String tenP, String maLP, String tenLP, int maKHACH, String tenKHACH,
+            Date ngayDatPhong, Date ngayTraPhong, String giaPhong, String tienTra) {
+        MaPDP = maPDP;
+        MaP = maP;
+        this.tenP = tenP;
+        this.maLP = maLP;
+        this.tenLP = tenLP;
+        MaKHACH = maKHACH;
+        this.tenKHACH = tenKHACH;
+        NgayDatPhong = ngayDatPhong;
+        NgayTraPhong = ngayTraPhong;
+        GiaPhong = giaPhong;
+        TienTra = tienTra;
     }
 
-    // Getters và Setters
+    public PhieuDatPhong(int maPDP, int maP, String tenP, String tenLP, String tenKHACH, Date ngayDatPhong,
+            Date ngayTraPhong, String giaPhong, String tienTra) {
+        MaPDP = maPDP;
+        MaP = maP;
+        this.tenP = tenP;
+        this.tenLP = tenLP;
+        this.tenKHACH = tenKHACH;
+        NgayDatPhong = ngayDatPhong;
+        NgayTraPhong = ngayTraPhong;
+        GiaPhong = giaPhong;
+        TienTra = tienTra;
+    }
+
     public int getMaPDP() {
-        return maPDP;
+        return MaPDP;
     }
 
     public void setMaPDP(int maPDP) {
-        this.maPDP = maPDP;
+        MaPDP = maPDP;
     }
 
-    public int getMaPhong() {
-        return maPhong;
+    public int getMaP() {
+        return MaP;
     }
 
-    public void setMaPhong(int maPhong) {
-        this.maPhong = maPhong;
+    public void setMaP(int maP) {
+        MaP = maP;
     }
 
-    public int getMaKhach() {
-        return maKhach;
+    public String getTenP() {
+        return tenP;
     }
 
-    public void setMaKhach(int maKhach) {
-        this.maKhach = maKhach;
+    public void setTenP(String tenP) {
+        this.tenP = tenP;
     }
 
-    public int getMaNV() {
-        return maNV;
+    public String getMaLP() {
+        return maLP;
     }
 
-    public void setMaNV(int maNV) {
-        this.maNV = maNV;
+    public void setMaLP(String maLP) {
+        this.maLP = maLP;
     }
 
-    public String getNgayDatPhong() {
-        return ngayDatPhong;
+    public String getTenLP() {
+        return tenLP;
     }
 
-    public void setNgayDatPhong(String ngayDatPhong) {
-        this.ngayDatPhong = ngayDatPhong;
+    public void setTenLP(String tenLP) {
+        this.tenLP = tenLP;
     }
 
-    public String getTraPhong() {
-        return traPhong;
+    public int getMaKHACH() {
+        return MaKHACH;
     }
 
-    public void setTraPhong(String traPhong) {
-        this.traPhong = traPhong;
+    public void setMaKHACH(int maKHACH) {
+        MaKHACH = maKHACH;
     }
 
-    public double getDonGiaThue() {
-        return donGiaThue;
+    public String getTenKHACH() {
+        return tenKHACH;
     }
 
-    public void setDonGiaThue(double donGiaThue) {
-        this.donGiaThue = donGiaThue;
+    public void setTenKHACH(String tenKHACH) {
+        this.tenKHACH = tenKHACH;
     }
 
-    public double getDonGiaPhong() {
-        return donGiaPhong;
+    public Date getNgayDatPhong() {
+        return NgayDatPhong;
     }
 
-    public void setDonGiaPhong(double donGiaPhong) {
-        this.donGiaPhong = donGiaPhong;
+    public void setNgayDatPhong(Date ngayDatPhong) {
+        NgayDatPhong = ngayDatPhong;
+    }
+
+    public Date getNgayTraPhong() {
+        return NgayTraPhong;
+    }
+
+    public void setNgayTraPhong(Date ngayTraPhong) {
+        NgayTraPhong = ngayTraPhong;
+    }
+
+    public String getGiaPhong() {
+        return GiaPhong;
+    }
+
+    public void setGiaPhong(String giaPhong) {
+        GiaPhong = giaPhong;
+    }
+
+    public String getTienTra() {
+        return TienTra;
+    }
+
+    public void setTienTra(String tienTra) {
+        TienTra = tienTra;
     }
 }
-

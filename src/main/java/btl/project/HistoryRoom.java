@@ -9,19 +9,17 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import btl.ClassData.*;
-
+import btl.classes.*;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 public class HistoryRoom {
 
-    public void Init(){
+    public void Init() {
         ShowHistory();
 
     }
-
 
     @FXML
     private AnchorPane anpAddUser;
@@ -59,19 +57,20 @@ public class HistoryRoom {
     public Stage primaryStage;
 
     private ObservableList<PhieuDatPhong> phieuDatPhongsList = null;
-    public void setPhieuDPList(ObservableList<PhieuDatPhong> pdp){
+
+    public void setPhieuDPList(ObservableList<PhieuDatPhong> pdp) {
         phieuDatPhongsList = pdp;
-        if (phieuDatPhongsList == null) System.out.println("setThatBai,danh sach rong");
-        else System.out.println("setThanhCong,danh sach co du lieu");
+        if (phieuDatPhongsList == null)
+            System.out.println("setThatBai,danh sach rong");
+        else
+            System.out.println("setThanhCong,danh sach co du lieu");
     }
 
-
-
-    public void setPrimaryStage(Stage stage){
+    public void setPrimaryStage(Stage stage) {
         primaryStage = stage;
     }
 
-    void ShowHistory(){
+    void ShowHistory() {
         ConfigTable();
         tblPDP.setItems(phieuDatPhongsList);
 
@@ -82,14 +81,14 @@ public class HistoryRoom {
         primaryStage.close();
     }
 
-    void ConfigTable(){
-        IDPDPtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,Integer>("MaPDP"));
-        NameKHtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,String>("tenKHACH"));
+    void ConfigTable() {
+        IDPDPtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, Integer>("MaPDP"));
+        NameKHtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, String>("tenKHACH"));
         NamePhongtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, String>("tenP"));
-        PricePhongtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,String>("GiaPhong"));
-        MoneyPaidtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,String>("TienTra"));
-        DayTookIn_table.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,Date>("NgayDatPhong"));
-        DayTookOut_table.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong,Date>("NgayTraPhong"));
+        PricePhongtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, String>("GiaPhong"));
+        MoneyPaidtable.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, String>("TienTra"));
+        DayTookIn_table.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, Date>("NgayDatPhong"));
+        DayTookOut_table.setCellValueFactory(new PropertyValueFactory<PhieuDatPhong, Date>("NgayTraPhong"));
     }
 
 }

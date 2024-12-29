@@ -19,8 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import btl.ClassData.*;
-
+import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -89,7 +89,7 @@ public class QL_KH extends Application {
     private TableColumn<Khach, String> Email_table;
 
     @FXML
-    private TableColumn<Khach,String> QuocTich_table;
+    private TableColumn<Khach, String> QuocTich_table;
 
     @FXML
     private TextField txtSearch;
@@ -106,7 +106,7 @@ public class QL_KH extends Application {
         ClearKH();
     }
 
-    void ClearKH(){
+    void ClearKH() {
 
         txtPhoneNumber.setText("");
         txtCMND_KH.setText("");
@@ -115,20 +115,19 @@ public class QL_KH extends Application {
         txtEmail.setText("");
     }
 
-
     @FXML
     void PressEdit(ActionEvent event) throws SQLException {
         if (tblKH.getSelectionModel().getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(null,"Hãy chọn khách hàng cần chỉnh sửa !");return;
-        }
-
-        if (rbNu.isSelected()== false && rbNam.isSelected() == false)
-        {
-            JOptionPane.showMessageDialog(null,"Phải chọn giới tính.");
+            JOptionPane.showMessageDialog(null, "Hãy chọn khách hàng cần chỉnh sửa !");
             return;
         }
 
-        int maKH = tblKH.getSelectionModel().getSelectedItem().getMaKHACH();
+        if (rbNu.isSelected() == false && rbNam.isSelected() == false) {
+            JOptionPane.showMessageDialog(null, "Phải chọn giới tính.");
+            return;
+        }
+
+        int maKH = tblKH.getSelectionModel().getSelectedItem().getMaKhach();
         String hoten = txtName_KH.getText();
         Date ngaysinh = java.sql.Date.valueOf(dtpWasBorn_KH.getValue());
         String cmnd = txtCMND_KH.getText();
@@ -136,45 +135,48 @@ public class QL_KH extends Application {
         String quoctich = txtCountry_KH.getText();
         String email = txtEmail.getText();
 
-        String gioitinh ="";
-        if (rbNu.isSelected()) gioitinh = rbNu.getText();
-        else gioitinh = rbNam.getText();
+        String gioitinh = "";
+        if (rbNu.isSelected())
+            gioitinh = rbNu.getText();
+        else
+            gioitinh = rbNam.getText();
 
-        db.updateKHDB(maKH,hoten,ngaysinh,cmnd,email,gioitinh,quoctich,sdt);
-        JOptionPane.showMessageDialog(null,"Sửa thành công !");
+        db.updateKHDB(maKH, hoten, ngaysinh, cmnd, email, gioitinh, quoctich, sdt);
+        JOptionPane.showMessageDialog(null, "Sửa thành công !");
         ShowQuest();
 
     }
 
     @FXML
     void PressNam(ActionEvent event) {
-        if (rbNam.isSelected()) rbNam.setSelected(true);
+        if (rbNam.isSelected())
+            rbNam.setSelected(true);
         rbNu.setSelected(false);
     }
 
-    @FXML   
+    @FXML
     void PressNu(ActionEvent event) {
-        if(rbNu.isSelected()) rbNu.setSelected(true);
+        if (rbNu.isSelected())
+            rbNu.setSelected(true);
         rbNam.setSelected(false);
     }
 
-    //tuần 10 chưa chưa bk nữa lên wen
+    // tuần 10 chưa chưa bk nữa lên wen
 
     @FXML
     void SearchKH(KeyEvent event) throws ClassNotFoundException {
-        if (event.getSource() == txtSearch)
-        {
+        if (event.getSource() == txtSearch) {
             String tukhoa = txtSearch.getText().toLowerCase();
             tblKH.setItems(null);
             List<Khach> KH_temp = new ArrayList<>();
 
-
-            if (tukhoa.equals("")) ShowQuest();
-            else{
-                for (int i=0;i<khachesList.size();i++){
-                    if (String.valueOf(khachesList.get(i).getMaKHACH()).toLowerCase().contains(tukhoa) ||
-                            khachesList.get(i).getTenKHACH().toLowerCase().contains(tukhoa)
-                    ) KH_temp.add(khachesList.get(i));
+            if (tukhoa.equals(""))
+                ShowQuest();
+            else {
+                for (int i = 0; i < khachesList.size(); i++) {
+                    if (String.valueOf(khachesList.get(i).getMaKhach()).toLowerCase().contains(tukhoa) ||
+                            khachesList.get(i).getTenKhach().toLowerCase().contains(tukhoa))
+                        KH_temp.add(khachesList.get(i));
                 }
 
                 ObservableList<Khach> khachesList_Search = FXCollections.observableArrayList(KH_temp);
@@ -187,36 +189,32 @@ public class QL_KH extends Application {
 
     @FXML
     void ShowInfoBacktoText(MouseEvent event) {
-        int maKH = tblKH.getSelectionModel().getSelectedItem().getMaKHACH();
+        int maKH = tblKH.getSelectionModel().getSelectedItem().getMaKhach();
         String ID_KH = String.valueOf(maKH);
 
         txtID_KH.setText(ID_KH);
-        txtName_KH.setText(tblKH.getSelectionModel().getSelectedItem().getTenKHACH());
+        txtName_KH.setText(tblKH.getSelectionModel().getSelectedItem().getTenKhach());
         txtEmail.setText(tblKH.getSelectionModel().getSelectedItem().getEmail());
-        txtCMND_KH.setText(tblKH.getSelectionModel().getSelectedItem().getCMND());
+        txtCMND_KH.setText(tblKH.getSelectionModel().getSelectedItem().getCmnd());
 
-        txtPhoneNumber.setText(tblKH.getSelectionModel().getSelectedItem().getSDT());
-
-
+        txtPhoneNumber.setText(tblKH.getSelectionModel().getSelectedItem().getSdt());
 
         if (tblKH.getSelectionModel().getSelectedItem().getGioiTinh().equals("Nam")) {
-            rbNam.setSelected(true);rbNu.setSelected(false);
+            rbNam.setSelected(true);
+            rbNu.setSelected(false);
+        } else {
+            rbNu.setSelected(true);
+            rbNam.setSelected(false);
         }
-        else {
-            rbNu.setSelected(true);rbNam.setSelected(false);
-        }
-
-
 
         dtpWasBorn_KH.setValue(tblKH.getSelectionModel().getSelectedItem().getNgaySinh().toLocalDate());
         txtCountry_KH.setText(tblKH.getSelectionModel().getSelectedItem().getQuocTich());
 
-
-    }
-    void InitializeComponent(){
-
     }
 
+    void InitializeComponent() {
+
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -229,25 +227,28 @@ public class QL_KH extends Application {
 
     private ConnectionDB db;
 
-    private static Stage  addDialogStage;
+    private static Stage addDialogStage;
 
     private static String user;
     private static String password;
 
     private static Stage primaryStage;
-    public void setpimaryStage(Stage pS){
+
+    public void setpimaryStage(Stage pS) {
         primaryStage = pS;
     }
 
     private static int flag = 0;
 
-    void ShowQuest(){
+    void ShowQuest() {
         try {
             dtpWasBorn_KH.setValue(LocalDate.now().minusYears(21));
             db = new ConnectionDB();
 
-            if (db == null) System.out.println("Unconnected");
-            else System.out.println("Connected");
+            if (db == null)
+                System.out.println("Unconnected");
+            else
+                System.out.println("Connected");
 
             String sql = String.format("SELECT * FROM khach");
 
@@ -256,8 +257,6 @@ public class QL_KH extends Application {
 
             List<Khach> KHList = new ArrayList<Khach>();
 
-
-
             int STT = 1;
             while (db.rs.next()) {
 
@@ -265,7 +264,7 @@ public class QL_KH extends Application {
 
                 String TenKH = db.rs.getString("TenKHACH");
 
-                Date Ngaysinh =  db.rs.getDate("NgaySinh") ;
+                Date Ngaysinh = db.rs.getDate("NgaySinh");
 
                 String SDT = db.rs.getString("SDT");
 
@@ -277,11 +276,9 @@ public class QL_KH extends Application {
 
                 String GioiTinh = db.rs.getString("GioiTinh");
 
-
-
-                Khach khach = new Khach(STT,MaKH,TenKH,SDT,Email,CMND,QuocTich,GioiTinh,Ngaysinh);
+                Khach khach = new Khach(STT, MaKH, TenKH, SDT, Email, CMND, QuocTich, GioiTinh, Ngaysinh);
                 KHList.add(khach);
-                STT ++;
+                STT++;
 
             }
 
@@ -296,16 +293,16 @@ public class QL_KH extends Application {
         }
     }
 
-    void ConfigTable(){
-        Index_table.setCellValueFactory(new PropertyValueFactory<Khach,Integer>("STT"));
-        IDKHtable.setCellValueFactory(new PropertyValueFactory<Khach,Integer>("MaKHACH"));
-        NameKHtable.setCellValueFactory(new PropertyValueFactory<Khach,String>("TenKHACH"));
-        WasBorn_table.setCellValueFactory(new PropertyValueFactory<Khach,Date>("NgaySinh"));
-        GioiTinh_table.setCellValueFactory(new PropertyValueFactory<Khach,String>("GioiTinh"));
-        Email_table.setCellValueFactory(new PropertyValueFactory<Khach,String>("Email"));
-        CMND_table.setCellValueFactory(new PropertyValueFactory<Khach,String>("CMND"));
-        SDT_table.setCellValueFactory(new PropertyValueFactory<Khach,String>("SDT"));
-        QuocTich_table.setCellValueFactory(new PropertyValueFactory<Khach,String>("QuocTich"));
+    void ConfigTable() {
+        Index_table.setCellValueFactory(new PropertyValueFactory<Khach, Integer>("STT"));
+        IDKHtable.setCellValueFactory(new PropertyValueFactory<Khach, Integer>("MaKHACH"));
+        NameKHtable.setCellValueFactory(new PropertyValueFactory<Khach, String>("TenKHACH"));
+        WasBorn_table.setCellValueFactory(new PropertyValueFactory<Khach, Date>("NgaySinh"));
+        GioiTinh_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("GioiTinh"));
+        Email_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("Email"));
+        CMND_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("CMND"));
+        SDT_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("SDT"));
+        QuocTich_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("QuocTich"));
     }
 
     void ShowHistory() throws IOException {
@@ -313,24 +310,19 @@ public class QL_KH extends Application {
         addDialogStage.initOwner(primaryStage);
         addDialogStage.initModality(Modality.WINDOW_MODAL);
 
-
-
         FXMLLoader historyRoom = new FXMLLoader(getClass().getResource("HistoryRoom.fxml"));
         Parent addsample2 = historyRoom.load();
 
         addDialogStage.setTitle("Lịch sử đặt phòng");
         Scene scene = new Scene(addsample2);
 
-
-
-
         addDialogStage.initStyle(StageStyle.UNDECORATED);
         HistoryRoom controller = historyRoom.getController();
         controller.setPrimaryStage(addDialogStage);
-        controller.setPhieuDPList(phieuDatPhongsList);controller.Init();
+        controller.setPhieuDPList(phieuDatPhongsList);
+        controller.Init();
         addDialogStage.setScene(scene);
         addDialogStage.showAndWait();
-
 
     }
 
@@ -339,28 +331,27 @@ public class QL_KH extends Application {
         db = new ConnectionDB();
 
         if (tblKH.getSelectionModel().getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(null,"Hãy chọn khách hàng cần xem !");return;
+            JOptionPane.showMessageDialog(null, "Hãy chọn khách hàng cần xem !");
+            return;
         }
 
-        String sql = String.format("SELECT * FROM [QLKS].[dbo].[View_PDP]");
+        String sql = String.format("SELECT * FROM phieudatphong");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
         db.rs = statement.executeQuery();
 
-        List <PhieuDatPhong> PDPList = new ArrayList<PhieuDatPhong>();
+        List<PhieuDatPhong> PDPList = new ArrayList<PhieuDatPhong>();
 
         while (db.rs.next()) {
-               if (tblKH.getSelectionModel().getSelectedItem().getMaKHACH() == db.rs.getInt("Mã Khách"))
-               {
-                   PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("Mã PDP"),db.rs.getInt("Mã Phòng"),
-                           db.rs.getString("Tên Phòng"),db.rs.getString("Tên LP"),
-                           db.rs.getString("Khách"),db.rs.getDate("Ngày đặt"),
-                           db.rs.getDate("Ngày trả"),db.rs.getBigDecimal("Giá Phòng").toPlainString(),
-                           db.rs.getBigDecimal("Tiền trả").toPlainString());
-                   PDPList.add(pdp);
-                   System.out.println(pdp.getTenKHACH()+pdp.getTenP() + pdp.getTienTra());
-               }
-
+            if (tblKH.getSelectionModel().getSelectedItem().getMaKhach() == db.rs.getInt("Mã Khách")) {
+                PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("Mã PDP"), db.rs.getInt("Mã Phòng"),
+                        db.rs.getString("Tên Phòng"), db.rs.getString("Tên LP"),
+                        db.rs.getString("Khách"), db.rs.getDate("Ngày đặt"),
+                        db.rs.getDate("Ngày trả"), db.rs.getBigDecimal("Giá Phòng").toPlainString(),
+                        db.rs.getBigDecimal("Tiền trả").toPlainString());
+                PDPList.add(pdp);
+                System.out.println(pdp.getTenKHACH() + pdp.getTenP() + pdp.getTienTra());
+            }
 
         }
         phieuDatPhongsList = FXCollections.observableArrayList(PDPList);
@@ -372,7 +363,7 @@ public class QL_KH extends Application {
         txtPhoneNumber.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
+                    String newValue) {
                 if (!newValue.matches("\\d*")) {
                     txtPhoneNumber.setText(newValue.replaceAll("[^\\d]", ""));
                 }
@@ -382,14 +373,12 @@ public class QL_KH extends Application {
         txtCMND_KH.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
+                    String newValue) {
                 if (!newValue.matches("\\d*")) {
                     txtCMND_KH.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
-
-
 
     }
 
