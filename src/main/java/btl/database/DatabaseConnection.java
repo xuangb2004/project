@@ -14,6 +14,7 @@ public class DatabaseConnection {
 
     private static Connection connection;
 
+    // Kết nối đến cơ sở dữ liệu
     public static Connection getConnection() {
         if (connection == null) {
             try {
@@ -26,6 +27,7 @@ public class DatabaseConnection {
         return connection;
     }
 
+    // Đóng kết nối cơ sở dữ liệu
     public static void closeConnection() {
         if (connection != null) {
             try {
@@ -40,7 +42,7 @@ public class DatabaseConnection {
     // Lấy danh sách phòng trống
     public List<Phong> getPhongTrong() throws SQLException {
         List<Phong> phongTrong = new ArrayList<>();
-        String query = "SELECT * FROM phong WHERE trangthai = 'Trống'"; // Giả sử có trường trangthai trong bảng phong
+        String query = "SELECT * FROM phong WHERE trangthai = 'Trống'";
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -120,13 +122,43 @@ public class DatabaseConnection {
         }
     }
 
-    // Yêu cầu hủy phòng
-    public void yeuCauHuyPhong(int maPDP) throws SQLException {
-        String query = "UPDATE phieudatphong SET trangThai = 'Đã hủy' WHERE MaPDP = ?";
+    // Xóa phiếu đặt phòng trong cơ sở dữ liệu
+    public void xoaPhieuDatPhong(int maPDP) throws SQLException {
+        String query = "DELETE FROM phieudatphong WHERE MaPDP = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, maPDP);
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Phiếu đặt phòng đã được xóa.");
+            } else {
+                System.out.println("Không tìm thấy phiếu đặt phòng để xóa.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Lỗi khi xóa phiếu đặt phòng", e);
         }
+    }
+
+    // Lấy phòng theo mã phòng
+    public Phong getPhongByMa(int maPhong) throws SQLException {
+        String query = "SELECT * FROM phong WHERE MaPhong = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, maPhong);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Phong(
+                        rs.getInt("MaPhong"),
+                        rs.getString("TenPhong"),
+                        rs.getInt("SoNguoi"),
+                        rs.getDouble("DonGia"),
+                        rs.getString("TrangThai"),
+                        rs.getString("MaLP"),
+                        rs.getInt("Tang")
+                    );
+                }
+            }
+        }
+        return null; // Trả về null nếu không tìm thấy phòng
     }
 }

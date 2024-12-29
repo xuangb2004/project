@@ -110,24 +110,31 @@ public class Guest {
 
     // Hủy giao dịch (nếu được phép)
     @FXML
-    public void huyGiaoDich() {
-        PhieuDatPhong phieuDaChon = tableTransactions.getSelectionModel().getSelectedItem();
-        if (phieuDaChon != null) {
-            try {
-                if (!phieuDaChon.isDaHuy()) {
-                    connectionDB.yeuCauHuyPhong(phieuDaChon.getMaPDP()); // Thay getMaPhieu() bằng getMaPDP()
-                    System.out.println("Yêu cầu hủy phòng đã được gửi.");
-                    hienThiGiaoDich(); // Cập nhật danh sách giao dịch
-                } else {
-                    System.out.println("Giao dịch này đã bị hủy trước đó.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+public void huyGiaoDich() {
+    PhieuDatPhong phieuDaChon = tableTransactions.getSelectionModel().getSelectedItem();
+    if (phieuDaChon != null) {
+        try {
+            // Xóa phiếu đặt phòng trong cơ sở dữ liệu
+            connectionDB.xoaPhieuDatPhong(phieuDaChon.getMaPDP()); // Thay getMaPDP() bằng mã phiếu
+
+            System.out.println("Giao dịch đã được hủy.");
+
+            // Cập nhật lại danh sách giao dịch
+            hienThiGiaoDich();
+            
+            // Cập nhật trạng thái phòng
+            Phong phong = connectionDB.getPhongByMa(phieuDaChon.getMaP());
+            if (phong != null) {
+                connectionDB.capNhatTrangThaiPhong(phong.getMaPhong(), "Còn trống"); // Trạng thái phòng quay lại là "Còn trống"
             }
-        } else {
-            System.out.println("Vui lòng chọn một giao dịch để hủy.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    } else {
+        System.out.println("Vui lòng chọn một giao dịch để hủy.");
     }
+}
+
 
     // Đăng xuất khi người dùng nhấn nút "Đăng xuất"
     @FXML
