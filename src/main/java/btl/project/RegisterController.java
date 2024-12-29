@@ -43,7 +43,9 @@ public class RegisterController {
 
   @FXML
   private void register() throws IOException, Exception {
-    if (password.getText().equals(confirmPassword.getText())) {
+    if (username.getText().isEmpty() || password.getText().isEmpty() || confirmPassword.getText().isEmpty()) {
+      warning.setText("Vui lòng nhập đầy đủ thông tin.");
+    } else if (password.getText().equals(confirmPassword.getText())) {
       switch (Auth.register(username.getText(), password.getText())) {
         case 0 -> {
           warning.setFill(BLACK);
@@ -61,8 +63,5 @@ public class RegisterController {
     } else {
       warning.setText("Mật khẩu không khớp.");
     }
-    username.clear();
-    password.clear();
-    confirmPassword.clear();
   }
 }
