@@ -55,7 +55,7 @@
       </ImageView>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #ddd;">
          <children>
-            <Text fx:id="warning" fill="RED" layoutX="153.0" layoutY="346.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="86.276611328125" />
+            <Text fx:id="warning" fill="RED" layoutX="63.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="240.0" />
             <GridPane hgap="10.0" layoutX="18.0" layoutY="164.0" prefHeight="102.0" prefWidth="358.0" vgap="10.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.60001220703126" minWidth="10.0" prefWidth="177.00001220703126" />
