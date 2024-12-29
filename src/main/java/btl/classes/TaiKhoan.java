@@ -2,10 +2,11 @@ package btl.classes;
 
 public class TaiKhoan {
   public enum Role {
-    ADMIN, HOTEL, GUEST
+    ADMIN, HOTEL, GUEST, UNKNOWN
   }
-  private static int accountId;
-  private static Role role;
+
+  private static int accountId = -1;
+  private static Role role = Role.UNKNOWN;
 
   public static int getAccountId() {
     return accountId;
@@ -22,5 +23,10 @@ public class TaiKhoan {
       case 1 -> TaiKhoan.role = Role.HOTEL;
       case 2 -> TaiKhoan.role = Role.GUEST;
     }
+  }
+
+  public static void logout() {
+    TaiKhoan.accountId = -1;
+    TaiKhoan.role = Role.UNKNOWN;
   }
 }

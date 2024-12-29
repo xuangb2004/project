@@ -36,20 +36,22 @@ public class LoginController {
 
   @FXML
   private void signIn() throws IOException, Exception {
-    int loginState = Auth.login(username.getText(), password.getText());
-    switch (loginState) {
-      case 0 -> {
-        switch (getRole()) {
-          case Role.ADMIN -> App.setRoot("admin");
-          case Role.HOTEL -> App.setRoot("hotel");
-          case Role.GUEST -> App.setRoot("guest");
+    if (username.getText().isEmpty() || password.getText().isEmpty()) {
+      warning.setText("Vui lòng nhập tài khoản/mật khẩu");
+    } else {
+      int loginState = Auth.login(username.getText(), password.getText());
+      switch (loginState) {
+        case 0 -> {
+          switch (getRole()) {
+            case Role.ADMIN -> App.setRoot("admin");
+            case Role.HOTEL -> App.setRoot("hotel");
+            case Role.GUEST -> App.setRoot("guest");
+          }
+        }
+        default -> {
+          warning.setText("Tài khoản/mật khẩu không đúng");
         }
       }
-      default -> {
-        warning.setText("Tài khoản/mật khẩu không đúng");
-      }
     }
-    username.clear();
-    password.clear();
   }
 }
