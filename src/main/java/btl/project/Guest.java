@@ -1,19 +1,17 @@
 package btl.project;
 
-import btl.ClassData.ConnectionDB;
+import btl.database.DatabaseConnection;
 import btl.ClassData.Phong;
 import btl.ClassData.PhieuDatPhong;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Guest {
-    private ConnectionDB connectionDB;
 
     @FXML
     private TableView<Phong> tablePhong; // Bảng phòng
@@ -26,21 +24,18 @@ public class Guest {
     @FXML
     private Label lblRoomDetails; // Label hiển thị chi tiết phòng
 
-    private int maKhach = 1; // Mã khách hàng hiện tại (giả sử là 1, thay bằng giá trị thực tế từ đăng nhập)
+    private int maKhach; // ID khách hàng được nhận từ hệ thống đăng nhập
 
-    public Guest() {
-        try {
-            connectionDB = new ConnectionDB();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // Khởi tạo với mã khách hàng từ hệ thống đăng nhập
+    public Guest(int maKhachDangNhap) {
+        this.maKhach = maKhachDangNhap;
     }
 
     @FXML
     public void initialize() {
         try {
             hienThiPhong(); // Hiển thị danh sách phòng trống
-            hienThiGiaoDich(); // Hiển thị giao dịch của khách
+            hienThiGiaoDich(); // Hiển thị danh sách giao dịch của khách
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,13 +43,44 @@ public class Guest {
 
     // Hiển thị danh sách phòng trống
     public void hienThiPhong() throws SQLException {
-        List<Phong> danhSachPhong = connectionDB.getPhongTrong();
+        List<Phong> danhSachPhong = new ArrayList<>();
+        String query = "SELECT * FROM phong WHERE TrangThai = 'Trống'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                danhSachPhong.add(new Phong(
+                        rs.getInt("MaPhong"),
+                        rs.getString("TenPhong"),
+                        rs.getBigDecimal("GiaPhong")
+                ));
+            }
+        }
         tablePhong.getItems().setAll(danhSachPhong);
     }
 
     // Hiển thị danh sách giao dịch của khách hàng
     public void hienThiGiaoDich() throws SQLException {
-        List<PhieuDatPhong> danhSachGiaoDich = connectionDB.getDanhSachPhieuDatPhong(maKhach);
+        List<PhieuDatPhong> danhSachGiaoDich = new ArrayList<>();
+        String query = "SELECT * FROM phieudatphong WHERE MaKhach = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, maKhach);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    danhSachGiaoDich.add(new PhieuDatPhong(
+                            rs.getInt("MaPhieu"),
+                            rs.getInt("MaPhong"),
+                            rs.getDate("NgayDat").toLocalDate(),
+                            rs.getDate("NgayTra").toLocalDate(),
+                            rs.getBigDecimal("GiaPhong"),
+                            rs.getBoolean("DaHuy")
+                    ));
+                }
+            }
+        }
         tableTransactions.getItems().setAll(danhSachGiaoDich);
     }
 
@@ -66,24 +92,20 @@ public class Guest {
             LocalDate checkinDate = dpCheckin.getValue();
             LocalDate checkoutDate = dpCheckout.getValue();
             if (checkinDate != null && checkoutDate != null) {
-                try {
-                    int maNV = 1; // Giả sử nhân viên mặc định
-                    Timestamp ngayDat = Timestamp.valueOf(checkinDate.atStartOfDay());
-                    Timestamp traPhong = Timestamp.valueOf(checkoutDate.atStartOfDay());
+                String query = "INSERT INTO phieudatphong (MaPhong, MaKhach, NgayDat, NgayTra, GiaPhong) VALUES (?, ?, ?, ?, ?)";
+                try (Connection conn = DatabaseConnection.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(query)) {
 
-                    connectionDB.themPhieuDatPhong(
-                            phongDaChon.getMaPhong(),
-                            maKhach,
-                            maNV,
-                            ngayDat,
-                            traPhong,
-                            phongDaChon.getDonGia(),
-                            phongDaChon.getDonGia()
-                    );
-                    connectionDB.capNhatTrangThaiPhong(phongDaChon.getMaPhong(), "Đang sử dụng");
-                    hienThiPhong(); // Cập nhật lại danh sách phòng
-                    hienThiGiaoDich(); // Cập nhật lại danh sách giao dịch
-                    System.out.println("Đặt phòng thành công.");
+                    stmt.setInt(1, phongDaChon.getMaPhong());
+                    stmt.setInt(2, maKhach);
+                    stmt.setDate(3, Date.valueOf(checkinDate));
+                    stmt.setDate(4, Date.valueOf(checkoutDate));
+                    stmt.setBigDecimal(5, phongDaChon.getDonGia());
+
+                    stmt.executeUpdate();
+                    System.out.println("Đặt phòng thành công!");
+                    hienThiPhong(); // Cập nhật danh sách phòng
+                    hienThiGiaoDich(); // Cập nhật danh sách giao dịch
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -100,14 +122,14 @@ public class Guest {
     public void huyGiaoDich() {
         PhieuDatPhong phieuDaChon = tableTransactions.getSelectionModel().getSelectedItem();
         if (phieuDaChon != null) {
-            try {
-                if (!phieuDaChon.isDaHuy()) {
-                    connectionDB.yeuCauHuyPhong(phieuDaChon.getMaPhieu());
-                    System.out.println("Yêu cầu hủy phòng đã được gửi.");
-                    hienThiGiaoDich(); // Cập nhật danh sách giao dịch
-                } else {
-                    System.out.println("Giao dịch này đã bị hủy trước đó.");
-                }
+            String query = "UPDATE phieudatphong SET DaHuy = 1 WHERE MaPhieu = ?";
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(query)) {
+
+                stmt.setInt(1, phieuDaChon.getMaPhieu());
+                stmt.executeUpdate();
+                System.out.println("Yêu cầu hủy phòng đã được gửi.");
+                hienThiGiaoDich(); // Cập nhật danh sách giao dịch
             } catch (SQLException e) {
                 e.printStackTrace();
             }
