@@ -20,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -334,7 +335,7 @@ public class QL_KH extends Application {
             return;
         }
 
-        String sql = String.format("SELECT * FROM [QLKS].[dbo].[View_PDP]");
+        String sql = String.format("SELECT * FROM phieudatphong");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
         db.rs = statement.executeQuery();

@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import javax.xml.stream.XMLReporter;
@@ -102,7 +103,7 @@ public class Hotel {
     private ObservableList<PhieuDatPhong> phieuDatPhongsList = null;
 
     void setDSPDP_list() throws SQLException {
-        String sql = String.format("SELECT * FROM [hotelmanagementdb].[dbo].[phieudatphong]");
+        String sql = String.format("SELECT * FROM hotelmanagementdb.phieudatphong");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
         db.rs = statement.executeQuery();

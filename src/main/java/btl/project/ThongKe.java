@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -111,7 +112,7 @@ public class ThongKe {
             return;
         }
 
-        String sql = String.format("SELECT * FROM [hotelmanagement].[dbo].[phieudatphong]");
+        String sql = String.format("SELECT * FROM phieudatphong");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
         db.rs = statement.executeQuery();
@@ -135,7 +136,7 @@ public class ThongKe {
 
         db = new ConnectionDB();
         db.rs = db.stmt.executeQuery(
-                "SELECT * FROM phieudv pdv, DichVu dv, LoaiDV ldv WHERE pdv.MaDV = dv.MaDV and dv.MaLoaiDV  = ldv.MaLoaiDV ");
+                "SELECT * FROM phieudv pdv JOIN DichVu dv ON pdv.MaDV = dv.MaDV JOIN LoaiDV ldv ON dv.MaLoaiDV = ldv.MaLoaiDV ");
 
         List<PhieuDV> PDVList_Temp = new ArrayList<PhieuDV>();
 
@@ -154,7 +155,7 @@ public class ThongKe {
 
         for (int i = 0; i < PDVList_Temp.size(); i++) {
             db = new ConnectionDB();
-            db.rs = db.stmt.executeQuery("SELECT * FROM [dbo].[hoadon]");
+            db.rs = db.stmt.executeQuery("SELECT * FROM hoadon");
             // View_DetailsHD
             while (db.rs.next()) {
 
@@ -211,7 +212,7 @@ public class ThongKe {
             else
                 System.out.println("Connected");
 
-            String sql = String.format("SELECT * FROM [dbo].[hoadon]");
+            String sql = String.format("SELECT * FROM hoadon");
             // View_DetailsHD
 
             PreparedStatement statement = db.conn.prepareStatement(sql);

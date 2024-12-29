@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import java.math.BigDecimal;
 import java.sql.Date;

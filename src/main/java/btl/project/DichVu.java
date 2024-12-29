@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -157,7 +158,7 @@ public class DichVu {
     public void PressYES(ActionEvent event) throws SQLException {
 
         int MaPhieuDV = 0;
-        db.rs = db.stmt.executeQuery("Select top 1 * from [dbo].[phieudv] ORDER BY [MaPhieuDV] DESC");
+        db.rs = db.stmt.executeQuery("SELECT * FROM `phieudv` ORDER BY `MaPhieuDV` DESC LIMIT 1");
         while (db.rs.next())
             MaPhieuDV = db.rs.getInt("MaPhieuDV");
 
@@ -177,7 +178,7 @@ public class DichVu {
             }
         }
 
-        String sql = "SELECT * FROM  dbo.[hoadon] where MaPhong = ? and NgayInHD = ?";
+        String sql = "SELECT * FROM hoadon WHERE MaPhong = ? AND NgayInHD = ?";
         PreparedStatement stmt = db.conn.prepareStatement(sql);
         stmt.setInt(1, phongdat.getMaP());
         stmt.setDate(2, phongdat.getNgayTraPhong());

@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import btl.classes.*;
+import btl.database.ConnectionDB;
 
 import java.awt.*;
 import java.io.IOException;

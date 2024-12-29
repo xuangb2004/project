@@ -1,7 +1,5 @@
 package btl.database;
 
-import java.math.BigDecimal;
-
 import java.sql.*;
 
 public class DatabaseConnection {
@@ -10,8 +8,6 @@ public class DatabaseConnection {
     private static final String PASSWORD = "pass";
 
     private static Connection connection;
-    public Statement stmt;
-    public ResultSet rs;
 
     public static Connection getConnection() {
         if (connection == null) {
