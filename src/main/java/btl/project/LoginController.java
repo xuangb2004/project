@@ -19,7 +19,20 @@ public class LoginController {
   @FXML
   private Text warning;
 
-  public static Role role;
+  @FXML
+  private void initialize() {
+    username.requestFocus();
+  }
+
+  @FXML
+  private void nextField() {
+    password.requestFocus();
+  }
+
+  @FXML
+  private void goToRegister() throws IOException {
+    App.setRoot("register");
+  }
 
   @FXML
   private void signIn() throws IOException, Exception {
@@ -34,9 +47,9 @@ public class LoginController {
       }
       default -> {
         warning.setText("Tài khoản/mật khẩu không đúng");
-        username.clear();
-        password.clear();
       }
     }
+    username.clear();
+    password.clear();
   }
 }
