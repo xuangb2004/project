@@ -40,6 +40,7 @@ public class Auth {
       stmt.setString(1, username);
       ResultSet rs = stmt.executeQuery();
       if (rs.next()) {
+        DatabaseConnection.closeConnection();
         return 1; //username already exists
       }
       stmt = conn.prepareStatement("INSERT INTO users (role, username, password) VALUES (?, ?, ?)");
@@ -47,6 +48,7 @@ public class Auth {
       stmt.setString(2, username);
       stmt.setString(3, password);
       stmt.executeUpdate();
+      DatabaseConnection.closeConnection();
       return 0; //register successfully
     } catch (SQLException e) {
       throw e;
