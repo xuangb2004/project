@@ -118,15 +118,16 @@ public class Hotel implements Initializable {
             List<PhieuDatPhong> PDPList = new ArrayList<>();
             while (rs.next()) {
                 PhieuDatPhong pdp = new PhieuDatPhong(
-                        rs.getInt("Mã PDP"),
-                        rs.getInt("Mã Phòng"),
-                        rs.getString("Tên Phòng"),
-                        rs.getString("Tên LP"),
-                        rs.getString("Khách"),
-                        rs.getDate("Ngày đặt"),
-                        rs.getDate("Ngày trả"),
-                        rs.getBigDecimal("Giá Phòng").toPlainString(),
-                        rs.getBigDecimal("Tiền trả").toPlainString());
+                        rs.getInt("MaPDP"),
+                        rs.getInt("MaPhong"),
+                        rs.getString("TenPhong"),
+                        rs.getString("TenLP"),
+                        rs.getString("MaKhach"),
+
+                        rs.getDate("NgayDatPhong"),
+                        rs.getDate("TraPhong"),
+                        rs.getBigDecimal("DonGiaPhong").toPlainString(),
+                        rs.getBigDecimal("DonGiaThue").toPlainString());
                 PDPList.add(pdp);
             }
             phieuDatPhongsList = FXCollections.observableArrayList(PDPList);
@@ -156,7 +157,7 @@ public class Hotel implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi", "Không thể hiển thị giao diện đặt phòng: " + e.getMessage());
+
         }
     }
 

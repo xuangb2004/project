@@ -18,7 +18,7 @@ public class ConnectionDB {
         driverName = "com.mysql.cj.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/hotelmanagementdb";
         username = "root";
-        password = "giangvip123";
+        password = "pass";
 
         Class.forName(driverName);
         conn = DriverManager.getConnection(url, username, password);
