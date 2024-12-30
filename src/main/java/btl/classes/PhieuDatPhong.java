@@ -131,4 +131,9 @@ public class PhieuDatPhong {
     public void setTienTra(String tienTra) {
         TienTra = tienTra;
     }
+
+    public boolean isDaHuy() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isDaHuy'");
+    }
 }

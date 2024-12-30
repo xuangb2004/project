@@ -18,7 +18,7 @@ public class CreateDB {
 
             String databaseName = "hotelmanagementdb";
             String userName = "root";
-            String password = "giangvip123";
+            String password = "pass";
 
             Connection connection = DriverManager.getConnection(url, userName, password);
 
