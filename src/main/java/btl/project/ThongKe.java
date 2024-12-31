@@ -120,13 +120,13 @@ public class ThongKe {
         List<PhieuDatPhong> PDPList = new ArrayList<PhieuDatPhong>();
 
         while (db.rs.next()) {
-            if (tbl_HoaDon.getSelectionModel().getSelectedItem().getMaKHACH() == db.rs.getInt("Mã Khách")
-                    && tbl_HoaDon.getSelectionModel().getSelectedItem().getMaP() == db.rs.getInt("Mã phòng")) {
-                PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("Mã PDP"), db.rs.getInt("Mã Phòng"),
-                        db.rs.getString("Tên Phòng"), db.rs.getString("Tên LP"),
-                        db.rs.getString("Khách"), db.rs.getDate("Ngày đặt"),
-                        db.rs.getDate("Ngày trả"), db.rs.getBigDecimal("Giá Phòng").toPlainString(),
-                        db.rs.getBigDecimal("Tiền trả").toPlainString());
+            if (tbl_HoaDon.getSelectionModel().getSelectedItem().getMaKHACH() == db.rs.getInt("MaKhach")
+                    && tbl_HoaDon.getSelectionModel().getSelectedItem().getMaP() == db.rs.getInt("MaPhong")) {
+                PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("MaPDP"), db.rs.getInt("MaPhong"),
+                        db.rs.getString("TenPhong"), db.rs.getString("TenLP"),
+                        db.rs.getString("MaKhach"), db.rs.getDate("NgayDatPhong"),
+                        db.rs.getDate("TraPhong"), db.rs.getBigDecimal("DonGiaPhong").toPlainString(),
+                        db.rs.getBigDecimal("DonGiaThue").toPlainString());
                 PDPList.add(pdp);
                 System.out.println(pdp.getTenKHACH() + pdp.getTenP() + pdp.getTienTra());
             }
@@ -136,7 +136,7 @@ public class ThongKe {
 
         db = new ConnectionDB();
         db.rs = db.stmt.executeQuery(
-                "SELECT * FROM phieudv pdv JOIN DichVu dv ON pdv.MaDV = dv.MaDV JOIN LoaiDV ldv ON dv.MaLoaiDV = ldv.MaLoaiDV ");
+                "SELECT * FROM phieudv pdv JOIN dichvu dv ON pdv.MaDV = dv.MaDV JOIN loaidv ldv ON dv.MaLoaiDV = ldv.MaLoaiDV ");
 
         List<PhieuDV> PDVList_Temp = new ArrayList<PhieuDV>();
 
@@ -161,17 +161,17 @@ public class ThongKe {
 
                 if (tbl_HoaDon.getSelectionModel().getSelectedItem().getMaP() == db.rs.getInt("MaPhong")
                         && tbl_HoaDon.getSelectionModel().getSelectedItem().getNgayInHD()
-                                .equals(db.rs.getDate("Traphong"))
+                                .equals(db.rs.getDate("NgayTP"))
 
                 ) {
 
-                    if ((PDVList_Temp.get(i).getNgaySD().toLocalDate().isBefore(db.rs.getDate("Traphong").toLocalDate())
+                    if ((PDVList_Temp.get(i).getNgaySD().toLocalDate().isBefore(db.rs.getDate("NgayTP").toLocalDate())
                             || PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                    .equals(db.rs.getDate("Traphong").toLocalDate()))
+                                    .equals(db.rs.getDate("NgayTP").toLocalDate()))
                             && (PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                    .isAfter(db.rs.getDate("NgayDatPhong").toLocalDate())
+                                    .isAfter(db.rs.getDate("NgayDP").toLocalDate())
                                     || PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                            .equals(db.rs.getDate("NgayDatPhong").toLocalDate()))
+                                            .equals(db.rs.getDate("NgayDP").toLocalDate()))
                             && PDVList_Temp.get(i).getMaP() == db.rs.getInt("MaPhong")) {
                         PhieuDV pdv = new PhieuDV(PDVList_Temp.get(i).getMaPhieuDV(),
                                 PDVList_Temp.get(i).getMaP(),
@@ -232,10 +232,10 @@ public class ThongKe {
 
                 int MaNV = db.rs.getInt("MaNV");
                 String TenNV = db.rs.getString("TenNV");
-                String TenP = db.rs.getString("Tenphong");
+                String TenP = db.rs.getString("TenPhong");
 
                 HoaDon hoaDon_temp = new HoaDon(MaHD, MaP, tongTien.toPlainString(), ngayInHD, MaNV, TenNV, TenP);
-                HoaDon hoaDon = new HoaDon(hoaDon_temp, db.rs.getInt("MaKHACH"));
+                HoaDon hoaDon = new HoaDon(hoaDon_temp, db.rs.getInt("MaKhach"));
 
                 HDList.add(hoaDon);
 
@@ -254,10 +254,10 @@ public class ThongKe {
 
     void ConfigTable() {
         tb_MaHD.setCellValueFactory(new PropertyValueFactory<HoaDon, Integer>("MaHD"));
-        tb_TenPhong.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("TenP"));
+        tb_TenPhong.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("TenPhong"));
         tb_NgayIn.setCellValueFactory(new PropertyValueFactory<HoaDon, Date>("NgayInHD"));
         tb_NVlap.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("TenNV"));
-        tb_TongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("Tongtien"));
+        tb_TongTien.setCellValueFactory(new PropertyValueFactory<HoaDon, String>("TongTien"));
     }
 
 }

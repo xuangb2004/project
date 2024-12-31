@@ -158,7 +158,7 @@ public class HoaDonDetails {
         tb_tenDV.setCellValueFactory(new PropertyValueFactory<PhieuDV, String>("TenDV"));
         tb_LoaiDV.setCellValueFactory(new PropertyValueFactory<PhieuDV, String>("TenLDV"));
         tb_DVPrice.setCellValueFactory(new PropertyValueFactory<PhieuDV, String>("GiaDV"));
-        tb_SL.setCellValueFactory(new PropertyValueFactory<PhieuDV, Integer>("Soluong"));
+        tb_SL.setCellValueFactory(new PropertyValueFactory<PhieuDV, Integer>("SoLuong"));
         tb_TongTienDV.setCellValueFactory(new PropertyValueFactory<PhieuDV, String>("TienDV"));
         tb_DateUsed.setCellValueFactory(new PropertyValueFactory<PhieuDV, Date>("NgaySD"));
     }
