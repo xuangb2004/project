@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -135,60 +136,37 @@ public class ThongKe {
         phieuDatPhongsList = FXCollections.observableArrayList(PDPList);
 
         db = new ConnectionDB();
-        db.rs = db.stmt.executeQuery(
-                "SELECT * FROM phieudv pdv JOIN dichvu dv ON pdv.MaDV = dv.MaDV JOIN loaidv ldv ON dv.MaLoaiDV = ldv.MaLoaiDV ");
+        String sqlDV = "SELECT pdv.MaPhieuDV, pdv.MaPhong, pdv.MaDV, " +
+                "dv.TenDV, dv.MaLoaiDV, ldv.TenLoaiDV, " +
+                "dv.DonGiaDV as GiaDV, pdv.TienDV, pdv.SoLuong, pdv.NgaySD " +
+                "FROM phieudv pdv " +
+                "JOIN dichvu dv ON pdv.MaDV = dv.MaDV " +
+                "JOIN loaidv ldv ON dv.MaLoaiDV = ldv.MaLoaiDV " +
+                "WHERE pdv.MaPhong = ? " +
+                "AND pdv.NgaySD BETWEEN ? AND ?";
 
-        List<PhieuDV> PDVList_Temp = new ArrayList<PhieuDV>();
+        PreparedStatement stmtDV = db.conn.prepareStatement(sqlDV);
+        stmtDV.setInt(1, tbl_HoaDon.getSelectionModel().getSelectedItem().getMaP());
+        stmtDV.setDate(2, tbl_HoaDon.getSelectionModel().getSelectedItem().getNgayDP());
+        stmtDV.setDate(3, tbl_HoaDon.getSelectionModel().getSelectedItem().getNgayInHD());
 
-        while (db.rs.next()) {
+        ResultSet rsDV = stmtDV.executeQuery();
+        List<PhieuDV> PDVList = new ArrayList<>();
 
-            PhieuDV pdv = new PhieuDV(db.rs.getInt("MaPhieuDV"),
-                    db.rs.getInt("MaPhong"),
-                    db.rs.getString("MaDV"), db.rs.getString("TenDV"),
-                    db.rs.getString("MaLoaiDV"), db.rs.getString("TenLoaiDV"),
-                    db.rs.getBigDecimal("GiaDV").toPlainString(),
-                    db.rs.getBigDecimal("TienDV").toPlainString(), db.rs.getInt("Soluong"),
-                    db.rs.getDate("NgaySD"));
-            PDVList_Temp.add(pdv);
-        }
-        List<PhieuDV> PDVList = new ArrayList<PhieuDV>();
-
-        for (int i = 0; i < PDVList_Temp.size(); i++) {
-            db = new ConnectionDB();
-            db.rs = db.stmt.executeQuery("SELECT * FROM hoadon");
-            // View_DetailsHD
-            while (db.rs.next()) {
-
-                if (tbl_HoaDon.getSelectionModel().getSelectedItem().getMaP() == db.rs.getInt("MaPhong")
-                        && tbl_HoaDon.getSelectionModel().getSelectedItem().getNgayInHD()
-                                .equals(db.rs.getDate("NgayTP"))
-
-                ) {
-
-                    if ((PDVList_Temp.get(i).getNgaySD().toLocalDate().isBefore(db.rs.getDate("NgayTP").toLocalDate())
-                            || PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                    .equals(db.rs.getDate("NgayTP").toLocalDate()))
-                            && (PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                    .isAfter(db.rs.getDate("NgayDP").toLocalDate())
-                                    || PDVList_Temp.get(i).getNgaySD().toLocalDate()
-                                            .equals(db.rs.getDate("NgayDP").toLocalDate()))
-                            && PDVList_Temp.get(i).getMaP() == db.rs.getInt("MaPhong")) {
-                        PhieuDV pdv = new PhieuDV(PDVList_Temp.get(i).getMaPhieuDV(),
-                                PDVList_Temp.get(i).getMaP(),
-                                PDVList_Temp.get(i).getMaDV(),
-                                PDVList_Temp.get(i).getTenDV(),
-                                PDVList_Temp.get(i).getMaLDV(),
-                                PDVList_Temp.get(i).getTenLDV(),
-                                PDVList_Temp.get(i).getGiaDV(),
-                                PDVList_Temp.get(i).getTienDV(),
-                                PDVList_Temp.get(i).getSoluong(),
-                                PDVList_Temp.get(i).getNgaySD());
-                        PDVList.add(pdv);
-                        System.out.println(pdv.getTenDV() + pdv.getTienDV());
-                    }
-
-                }
-            }
+        while (rsDV.next()) {
+            PhieuDV pdv = new PhieuDV(
+                    rsDV.getInt("MaPhieuDV"),
+                    rsDV.getInt("MaPhong"),
+                    rsDV.getString("MaDV"),
+                    rsDV.getString("TenDV"),
+                    rsDV.getString("MaLoaiDV"),
+                    rsDV.getString("TenLoaiDV"),
+                    rsDV.getBigDecimal("GiaDV").toPlainString(),
+                    rsDV.getBigDecimal("TienDV").toPlainString(),
+                    rsDV.getInt("SoLuong"),
+                    rsDV.getDate("NgaySD"));
+            PDVList.add(pdv);
+            System.out.println("Đã thêm dịch vụ: " + pdv.getTenDV() + " - " + pdv.getTienDV());
         }
 
         phieuDVSsList = FXCollections.observableArrayList(PDVList);

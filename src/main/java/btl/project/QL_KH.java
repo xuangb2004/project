@@ -341,21 +341,23 @@ public class QL_KH extends Application {
                 "WHERE pdp.MaKhach = ?");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
+        statement.setInt(1, tblKH.getSelectionModel().getSelectedItem().getMaKhach());
         db.rs = statement.executeQuery();
 
         List<PhieuDatPhong> PDPList = new ArrayList<PhieuDatPhong>();
 
         while (db.rs.next()) {
-            if (tblKH.getSelectionModel().getSelectedItem().getMaKhach() == db.rs.getInt("Mã Khách")) {
-                PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("MaPDP"), db.rs.getInt("MaPhong"),
-                        db.rs.getString("TenPhong"), db.rs.getString("TenLP"),
-                        db.rs.getString("TenKhach"), db.rs.getDate("NgayDatPhong"),
-                        db.rs.getDate("TraPhong"), db.rs.getBigDecimal("DonGiaPhong").toPlainString(),
-                        db.rs.getBigDecimal("DonGiaThue").toPlainString());
-                PDPList.add(pdp);
-                System.out.println(pdp.getTenKHACH() + pdp.getTenP() + pdp.getTienTra());
-            }
-
+            PhieuDatPhong pdp = new PhieuDatPhong(
+                    db.rs.getInt("MaPDP"),
+                    db.rs.getInt("MaPhong"),
+                    db.rs.getString("TenPhong"),
+                    db.rs.getString("TenLP"),
+                    db.rs.getString("TenKhach"),
+                    db.rs.getDate("NgayDatPhong"),
+                    db.rs.getDate("TraPhong"),
+                    db.rs.getBigDecimal("DonGiaPhong").toPlainString(),
+                    db.rs.getBigDecimal("DonGiaThue").toPlainString());
+            PDPList.add(pdp);
         }
         phieuDatPhongsList = FXCollections.observableArrayList(PDPList);
         ShowHistory();
