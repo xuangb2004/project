@@ -6,7 +6,6 @@ public class DichVu {
     private double donGiaDV;
     private String maLoaiDV;
 
-    // Constructor đầy đủ
     public DichVu(String maDV, String tenDV, double donGiaDV, String maLoaiDV) {
         this.maDV = maDV;
         this.tenDV = tenDV;
@@ -14,7 +13,6 @@ public class DichVu {
         this.maLoaiDV = maLoaiDV;
     }
 
-    // Getters và Setters
     public String getMaDV() {
         return maDV;
     }
@@ -47,4 +45,3 @@ public class DichVu {
         this.maLoaiDV = maLoaiDV;
     }
 }
-
