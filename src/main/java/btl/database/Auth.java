@@ -4,13 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.text.ParseException;
 
 import btl.classes.TaiKhoan.Role;
 import static btl.classes.TaiKhoan.setUser;
+
+import static btl.project.RegisterController.Account;
 
 public class Auth {
   public static int login(String username, String password) throws Exception {
@@ -37,7 +37,7 @@ public class Auth {
     }
   }
 
-  public static int register(String username, String password) throws Exception {
+  public static int check(String username, String password) throws Exception {
     try {
       Connection conn = DatabaseConnection.getConnection();
       PreparedStatement stmt = conn.prepareStatement("SELECT * FROM taikhoan WHERE username = ?");
@@ -47,13 +47,8 @@ public class Auth {
         DatabaseConnection.closeConnection();
         return 1; // username already exists
       }
-      stmt = conn.prepareStatement("INSERT INTO taikhoan (role, username, password) VALUES (?, ?, ?)");
-      stmt.setInt(1, Role.GUEST.ordinal());
-      stmt.setString(2, username);
-      stmt.setString(3, password);
-      stmt.executeUpdate();
       DatabaseConnection.closeConnection();
-      return 0; // register successfully
+      return 0; // new account is valid
     } catch (SQLException e) {
       throw e;
     }
@@ -61,22 +56,37 @@ public class Auth {
 
   public static void registerInfo(String name, String dob, String id, String phone, String gender, String email,
       String nation) throws SQLException, ParseException {
-    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-    Date dateOfBirth = (Date) df.parse(dob);
+    Date dateOfBirth = Date.valueOf(dob);
     try {
       Connection conn = DatabaseConnection.getConnection();
-      String sql = "INSERT INTO khach (TenKhach, NgaySinh, CMND, SDT, GioiTinh, Email, QuocTich) VALUES (?, ?, ?, ?, ?, ?, ?)";
-      PreparedStatement stmt = conn.prepareStatement(sql);
 
-      stmt.setString(1, name);
-      stmt.setDate(2, dateOfBirth);
-      stmt.setString(3, id);
-      stmt.setString(4, phone);
-      stmt.setString(5, gender);
-      stmt.setString(6, email);
-      stmt.setString(7, nation);
+      PreparedStatement stmt = conn
+          .prepareStatement("INSERT INTO taikhoan (role, username, password) VALUES (?, ?, ?)");
+      stmt.setInt(1, Role.GUEST.ordinal());
+      stmt.setString(2, Account.getUsername());
+      stmt.setString(3, Account.getPassword());
+      stmt.executeUpdate();
 
-      stmt.execute();
+      stmt = conn.prepareStatement("SELECT id FROM taikhoan WHERE username = ?");
+      stmt.setString(1, Account.getUsername());
+      ResultSet rs = stmt.executeQuery();
+      int Accountid = rs.getInt("id");
+
+      String sql = "INSERT INTO khach (account_id, TenKhach, NgaySinh, CMND, SDT, GioiTinh, Email, QuocTich) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      stmt = conn.prepareStatement(sql);
+
+      stmt.setInt(1, Accountid);
+      stmt.setString(2, name);
+      stmt.setDate(3, dateOfBirth);
+      stmt.setString(4, id);
+      stmt.setString(5, phone);
+      stmt.setString(6, gender);
+      stmt.setString(7, email);
+      stmt.setString(8, nation);
+
+      stmt.executeUpdate();
+
+      DatabaseConnection.closeConnection();
 
     } catch (SQLException e) {
       throw e;
