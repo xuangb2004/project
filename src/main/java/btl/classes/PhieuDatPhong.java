@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 
 public class PhieuDatPhong {
     private int MaPDP;
-    private int MaP;
+    private int MaPhong;
     private String tenP;
     private String maLP;
     private String tenLP;
@@ -16,10 +16,10 @@ public class PhieuDatPhong {
     private String GiaPhong;
     private String TienTra;
 
-    public PhieuDatPhong(int maPDP, int maP, String tenP, String maLP, String tenLP, int maKHACH, String tenKHACH,
+    public PhieuDatPhong(int maPDP, int maPhong, String tenP, String maLP, String tenLP, int maKHACH, String tenKHACH,
             Date ngayDatPhong, Date ngayTraPhong, String giaPhong, String tienTra) {
         MaPDP = maPDP;
-        MaP = maP;
+        MaPhong = maPhong;
         this.tenP = tenP;
         this.maLP = maLP;
         this.tenLP = tenLP;
@@ -31,10 +31,10 @@ public class PhieuDatPhong {
         TienTra = tienTra;
     }
 
-    public PhieuDatPhong(int maPDP, int maP, String tenP, String tenLP, String tenKHACH, Date ngayDatPhong,
+    public PhieuDatPhong(int maPDP, int maPhong, String tenP, String tenLP, String tenKHACH, Date ngayDatPhong,
             Date ngayTraPhong, String giaPhong, String tienTra) {
         MaPDP = maPDP;
-        MaP = maP;
+        MaPhong = maPhong;
         this.tenP = tenP;
         this.tenLP = tenLP;
         this.tenKHACH = tenKHACH;
@@ -52,12 +52,12 @@ public class PhieuDatPhong {
         MaPDP = maPDP;
     }
 
-    public int getMaP() {
-        return MaP;
+    public int getMaPhong() {
+        return MaPhong;
     }
 
-    public void setMaP(int maP) {
-        MaP = maP;
+    public void setMaPhong(int maPhong) {
+        MaPhong = maPhong;
     }
 
     public String getTenP() {

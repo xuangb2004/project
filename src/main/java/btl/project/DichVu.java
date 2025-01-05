@@ -83,7 +83,7 @@ public class DichVu {
         ShowCombobox();
         ShowGia();
         for (int i = 0; i < listDSDV_ThucDon.size(); i++) {
-            listDSDV_ThucDon.get(i).setMaPhongDat(phongdat.getMaP());
+            listDSDV_ThucDon.get(i).setMaPhongDat(phongdat.getMaPhong());
         }
     }
 
@@ -170,7 +170,7 @@ public class DichVu {
                     int sl = listDSDV.get(i).getSoLuong().getValue();
 
                     BigDecimal tongtien = BigDecimal.valueOf(dongiaDV * sl);
-                    db.addPDV(MaPhieuDV + 1, phongdat.getMaP(), listDSDV_ThucDon.get(j).getMaDV(),
+                    db.addPDV(MaPhieuDV + 1, phongdat.getMaPhong(), listDSDV_ThucDon.get(j).getMaDV(),
                             tongtien, listDSDV.get(i).getSoLuong().getValue(),
                             Date.valueOf(LocalDateTime.now().toLocalDate()),
                             BigDecimal.valueOf(dongiaDV));
@@ -180,7 +180,7 @@ public class DichVu {
 
         String sql = "SELECT * FROM hoadon WHERE MaPhong = ? AND NgayInHD = ?";
         PreparedStatement stmt = db.conn.prepareStatement(sql);
-        stmt.setInt(1, phongdat.getMaP());
+        stmt.setInt(1, phongdat.getMaPhong());
         stmt.setDate(2, phongdat.getNgayTraPhong());
         stmt.execute();
 
@@ -193,7 +193,7 @@ public class DichVu {
         double TT = TienHD.doubleValue() + TongTien().doubleValue();
         TienHD = BigDecimal.valueOf(TT);
 
-        db.updateHD(phongdat.getMaP(), TienHD, phongdat.getNgayTraPhong());
+        db.updateHD(phongdat.getMaPhong(), TienHD, phongdat.getNgayTraPhong());
         JOptionPane.showMessageDialog(null, "Đặt dịch vụ thành công !");
         primaryStage.close();
     }

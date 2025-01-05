@@ -18,7 +18,7 @@ public class ConnectionDB {
         driverName = "com.mysql.cj.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/hotelmanagementdb";
         username = "root";
-        password = "pass";
+        password = "giangvip123";
 
         Class.forName(driverName);
         conn = DriverManager.getConnection(url, username, password);
@@ -63,13 +63,13 @@ public class ConnectionDB {
         System.out.println("Đăng ký khách hàng thành công");
     }
 
-    public void addPDPDB(int maPDP, int maP, int maKHACH, int maNV, Date NgayDat, Date NgayTra, BigDecimal TienTra,
+    public void addPDPDB(int maPDP, int maPhong, int maKHACH, int maNV, Date NgayDat, Date NgayTra, BigDecimal TienTra,
             BigDecimal GiaPhong) throws SQLException {
         String sql = "INSERT INTO phieudatphong (MaPDP, MaPhong, MaKhach, MaNV, NgayDatPhong, TraPhong, DonGiaThue, DonGiaPhong) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
 
         stmt.setInt(1, maPDP);
-        stmt.setInt(2, maP);
+        stmt.setInt(2, maPhong);
         stmt.setInt(3, maKHACH);
         stmt.setInt(4, maNV);
         stmt.setDate(5, NgayDat);

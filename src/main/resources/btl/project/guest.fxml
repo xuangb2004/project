@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anpHome" prefHeight="750.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl.project.Guest">
    <children>
@@ -20,7 +20,7 @@
 
       <!-- Main Content -->
       <TabPane layoutY="59.0" prefHeight="691.0" prefWidth="1026.0" tabClosingPolicy="UNAVAILABLE">
-         <tabs>
+        <tabs>
             <!-- Tab Đặt Phòng -->
             <Tab text="Đặt Phòng">
                <content>
@@ -56,27 +56,27 @@
                               <Label text="Họ tên:" GridPane.rowIndex="0" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtTenKhach" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
                               <Label text="Số điện thoại:" GridPane.rowIndex="0" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerPhone" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                              <TextField fx:id="txtSDT" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
                               <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                               <Label text="CMND:" GridPane.rowIndex="1" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerCMND" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                              <TextField fx:id="txtCMND" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
                               <Label text="Quốc tịch:" GridPane.rowIndex="2" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerCountry" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtQuocTich" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
                               <Label text="Ngày sinh:" GridPane.rowIndex="2" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
@@ -86,7 +86,7 @@
                               <Label text="Giới tính:" GridPane.rowIndex="3" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <ComboBox fx:id="cbxGender" prefWidth="150.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                              <ComboBox fx:id="cbxGioiTinh" prefWidth="150.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
                               <Label text="Ngày nhận phòng:" GridPane.rowIndex="3" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
@@ -101,7 +101,7 @@
 
                            <!-- Buttons -->
                            <HBox alignment="CENTER" spacing="20.0">
-                              <Button mnemonicParsing="false" onAction="#datPhong" style="-fx-background-color: #4CAF50;" text="Đặt phòng" textFill="WHITE">
+                              <Button mnemonicParsing="false" onAction="#handleDatPhong" style="-fx-background-color: #4CAF50;" text="Đặt phòng" textFill="WHITE">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Button>
                            </HBox>
@@ -126,8 +126,8 @@
                            <TableColumn fx:id="colGiaDV" text="Giá" prefWidth="100.0"/>
                            <TableColumn fx:id="colMoTaDV" text="Mô Tả" prefWidth="200.0"/>
                         </columns>
-                     </TableView>
-
+                    </TableView>
+                    
                      <!-- Form đặt dịch vụ -->
                      <GridPane hgap="20.0" vgap="15.0" style="-fx-background-color: #f5f5f5; -fx-padding: 20;">
                         <Label text="Số lượng:" GridPane.rowIndex="0" GridPane.columnIndex="0">
@@ -141,38 +141,43 @@
                            <font><Font name="System Bold" size="14.0"/></font>
                         </Button>
                      </HBox>
-                  </VBox>
+                    </VBox>
                </content>
             </Tab>
 
-            <!-- Tab Lịch Sử Giao Dịch -->
-            <Tab text="Lịch Sử Giao Dịch">
-               <content>
-                  <VBox spacing="20.0">
-                     <padding>
-                        <Insets bottom="20" left="20" right="20" top="20"/>
-                     </padding>
-                     <!-- Danh sách giao dịch -->
-                     <TableView fx:id="tableGiaoDich" prefHeight="300.0">
-                        <columns>
-                           <TableColumn fx:id="colMaGD" text="Mã GD" prefWidth="80.0"/>
-                           <TableColumn fx:id="colLoaiGD" text="Loại GD" prefWidth="100.0"/>
-                           <TableColumn fx:id="colNgayGD" text="Ngày GD" prefWidth="120.0"/>
-                           <TableColumn fx:id="colTongTien" text="Tổng Tiền" prefWidth="100.0"/>
-                           <TableColumn fx:id="colTrangThaiGD" text="Trạng Thái" prefWidth="100.0"/>
-                        </columns>
-                     </TableView>
-
-                     <HBox alignment="CENTER" spacing="20.0">
-                        <Button mnemonicParsing="false" onAction="#yeuCauHuyGiaoDich" style="-fx-background-color: #f44336;" text="Yêu cầu hủy" textFill="WHITE">
-                           <font><Font name="System Bold" size="14.0"/></font>
-                        </Button>
-                     </HBox>
-                  </VBox>
-               </content>
+            <!-- Tab Lịch sử đặt phòng -->
+            <Tab text="Lịch Sử Đặt Phòng">
+                <content>
+                    <VBox spacing="20.0">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20"/>
+                        </padding>
+                        <TableView fx:id="tableLichSu" prefHeight="400.0">
+                            <columns>
+                                <TableColumn fx:id="colMaDP" text="Mã ĐP" prefWidth="80.0"/>
+                                <TableColumn fx:id="colTenPhongLS" text="Tên Phòng" prefWidth="120.0"/>
+                                <TableColumn fx:id="colNgayDat" text="Ngày Đặt" prefWidth="100.0"/>
+                                <TableColumn fx:id="colNgayTra" text="Ngày Trả" prefWidth="100.0"/>
+                                <TableColumn fx:id="colTrangThaiDP" text="Trạng Thái" prefWidth="100.0"/>
+                                <TableColumn fx:id="colGiaPhong" text="Giá Phòng" prefWidth="100.0"/>
+                            </columns>
+                        </TableView>
+                        
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Yêu cầu hủy đặt phòng" 
+                                    onAction="#yeuCauHuyGiaoDich"
+                                    style="-fx-background-color: #e96151;" 
+                                    textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="14.0"/>
+                                </font>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </content>
             </Tab>
-         </tabs>
-      </TabPane>
+        </tabs>
+    </TabPane>
 
       <!-- Logout Button -->
       <Button layoutX="950.0" layoutY="15.0" mnemonicParsing="false" onAction="#PressSignOut" style="-fx-background-color: #f44336;" text="Đăng xuất" textFill="WHITE">
