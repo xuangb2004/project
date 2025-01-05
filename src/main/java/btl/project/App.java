@@ -14,9 +14,11 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {
+        primaryStage = stage;
         scene = new Scene(loadFXML("login"), 640, 400);
         stage.setScene(scene);
         stage.show();
@@ -24,6 +26,16 @@ public class App extends Application {
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        if (fxml.equals("login")) {
+            primaryStage.setWidth(640);
+            primaryStage.setHeight(400);
+        } else if (fxml.equals("hotel")) {
+            primaryStage.setMaximized(true);
+        } else if (fxml.equals("admin")) {
+            primaryStage.setWidth(1350);
+            primaryStage.setHeight(775);
+            primaryStage.centerOnScreen();
+        }
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
