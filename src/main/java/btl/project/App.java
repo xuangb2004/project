@@ -35,6 +35,10 @@ public class App extends Application {
             primaryStage.setWidth(1350);
             primaryStage.setHeight(775);
             primaryStage.centerOnScreen();
+        } else if (fxml.equals("guest")) {
+            primaryStage.setWidth(1350);
+            primaryStage.setHeight(775);
+            primaryStage.centerOnScreen();
         }
     }
 

@@ -95,7 +95,7 @@ public class QLDP {
         else
             System.out.println("Connected");
 
-        String sql = String.format("SELECT * FROM PHONG");
+        String sql = String.format("SELECT * FROM phong");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
         db.rs = statement.executeQuery();
@@ -109,8 +109,8 @@ public class QLDP {
                 txtIDRoom.setText(String.valueOf(db.rs.getInt("MaPhong")));
                 BigDecimal gia = db.rs.getBigDecimal("DonGia");
                 txtRoomPrice.setText(gia.toPlainString());
-                txtRoomPeople.setText(String.valueOf(db.rs.getInt("Songuoi")));
-                txtNameRoom.setText(db.rs.getString("Tenphong"));
+                txtRoomPeople.setText(String.valueOf(db.rs.getInt("SoNguoi")));
+                txtNameRoom.setText(db.rs.getString("TenPhong"));
                 txtRoomFloor.setText(String.valueOf(db.rs.getInt("Tang")));
                 if (db.rs.getString("MaLP").equals("DON"))
                     rbDon.setSelected(true);
@@ -208,7 +208,7 @@ public class QLDP {
         Khach khachDP = new Khach(txtQName.getText(), txtQPhoneNumber.getText(), txtQEmail.getText(),
                 txtQCMND.getText(), txtQCountry.getText(), GioiTinh, Date.valueOf(dtpQWasBorn.getValue()));
 
-        db.rs = db.stmt.executeQuery("SELECT * FROM  KHACH");
+        db.rs = db.stmt.executeQuery("SELECT * FROM  khach");
         int dem = 0;
         while (db.rs.next()) {
             if (txtQCMND.getText().equals(db.rs.getString("CMND"))) {
@@ -229,13 +229,13 @@ public class QLDP {
         else
             System.out.println("Connected");
 
-        String sql = String.format("SELECT * FROM KHACH WHERE CMND = ?");
+        String sql = String.format("SELECT * FROM khach WHERE CMND = ?");
         PreparedStatement statement = db.conn.prepareStatement(sql);
         statement.setString(1, txtQCMND.getText());
         db.rs = statement.executeQuery();
 
         while (db.rs.next()) {
-            MaQ = db.rs.getInt("MaKHACH");
+            MaQ = db.rs.getInt("MaKhach");
         }
 
         int MaPDP = 0;

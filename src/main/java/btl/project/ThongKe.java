@@ -190,7 +190,11 @@ public class ThongKe {
             else
                 System.out.println("Connected");
 
-            String sql = String.format("SELECT * FROM hoadon");
+            String sql = "SELECT hd.*, p.TenPhong, nv.TenNV, pdp.NgayDatPhong " +
+                    "FROM hoadon hd " +
+                    "JOIN phong p ON hd.MaPhong = p.MaPhong " +
+                    "JOIN nhanvien nv ON hd.MaNV = nv.MaNV " +
+                    "JOIN phieudatphong pdp ON hd.MaPhong = pdp.MaPhong";
             // View_DetailsHD
 
             PreparedStatement statement = db.conn.prepareStatement(sql);
