@@ -6,8 +6,6 @@ import btl.database.Auth;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import static javafx.scene.paint.Color.BLACK;
-import static javafx.scene.paint.Color.RED;
 import javafx.scene.text.Text;
 
 public class RegisterController {
@@ -48,15 +46,7 @@ public class RegisterController {
     } else if (password.getText().equals(confirmPassword.getText())) {
       switch (Auth.register(username.getText(), password.getText())) {
         case 0 -> {
-          warning.setFill(BLACK);
-          warning.setText("Đăng ký thành công. Chuyển sang trang đăng nhập.");
-          try {
-            Thread.sleep(5000);
-          } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-          }
-          warning.setFill(RED);
-          App.setRoot("login");
+          App.setRoot("register-info");
         }
         case 1 -> warning.setText("Tên tài khoản đã được sử dụng.");
       }

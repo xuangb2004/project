@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.text.ParseException;
 
 import btl.classes.TaiKhoan.Role;
 import static btl.classes.TaiKhoan.setUser;
@@ -50,6 +54,30 @@ public class Auth {
       stmt.executeUpdate();
       DatabaseConnection.closeConnection();
       return 0; // register successfully
+    } catch (SQLException e) {
+      throw e;
+    }
+  }
+
+  public static void registerInfo(String name, String dob, String id, String phone, String gender, String email,
+      String nation) throws SQLException, ParseException {
+    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+    Date dateOfBirth = (Date) df.parse(dob);
+    try {
+      Connection conn = DatabaseConnection.getConnection();
+      String sql = "INSERT INTO khach (TenKhach, NgaySinh, CMND, SDT, GioiTinh, Email, QuocTich) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+
+      stmt.setString(1, name);
+      stmt.setDate(2, dateOfBirth);
+      stmt.setString(3, id);
+      stmt.setString(4, phone);
+      stmt.setString(5, gender);
+      stmt.setString(6, email);
+      stmt.setString(7, nation);
+
+      stmt.execute();
+
     } catch (SQLException e) {
       throw e;
     }
