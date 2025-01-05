@@ -10,7 +10,7 @@ import btl.classes.Phong;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/hotelmanagementdb";
     private static final String USER = "root";
-    private static final String PASSWORD = "pass";
+    private static final String PASSWORD = "giangvip123";
 
     private static Connection connection;
 
@@ -44,8 +44,8 @@ public class DatabaseConnection {
         List<Phong> phongTrong = new ArrayList<>();
         String query = "SELECT * FROM phong WHERE trangthai = 'Trống'";
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 int maPhong = rs.getInt("maPhong");
@@ -68,7 +68,7 @@ public class DatabaseConnection {
         List<PhieuDatPhong> danhSach = new ArrayList<>();
         String query = "SELECT * FROM phieudatphong WHERE MaKHACH = ?";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, maKHACH);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -85,7 +85,8 @@ public class DatabaseConnection {
                     String giaPhong = rs.getString("GiaPhong");
                     String tienTra = rs.getString("TienTra");
 
-                    PhieuDatPhong phieu = new PhieuDatPhong(maPDP, maP, tenP, maLP, tenLP, maKhach, tenKhach, ngayDatPhong, ngayTraPhong, giaPhong, tienTra);
+                    PhieuDatPhong phieu = new PhieuDatPhong(maPDP, maP, tenP, maLP, tenLP, maKhach, tenKhach,
+                            ngayDatPhong, ngayTraPhong, giaPhong, tienTra);
                     danhSach.add(phieu);
                 }
             }
@@ -94,10 +95,11 @@ public class DatabaseConnection {
     }
 
     // Thêm phiếu đặt phòng mới
-    public void themPhieuDatPhong(int maP, int maKhach, int maNV, Timestamp ngayDatPhong, Timestamp ngayTraPhong, String giaPhong, String tienTra) throws SQLException {
+    public void themPhieuDatPhong(int maP, int maKhach, int maNV, Timestamp ngayDatPhong, Timestamp ngayTraPhong,
+            String giaPhong, String tienTra) throws SQLException {
         String query = "INSERT INTO phieudatphong (MaP, MaKHACH, MaNV, NgayDatPhong, NgayTraPhong, GiaPhong, TienTra) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, maP);
             stmt.setInt(2, maKhach);
             stmt.setInt(3, maNV);
@@ -114,7 +116,7 @@ public class DatabaseConnection {
     public void capNhatTrangThaiPhong(int maPhong, String trangThai) throws SQLException {
         String query = "UPDATE phong SET trangthai = ? WHERE maPhong = ?";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, trangThai);
             stmt.setInt(2, maPhong);
 
@@ -126,7 +128,7 @@ public class DatabaseConnection {
     public void xoaPhieuDatPhong(int maPDP) throws SQLException {
         String query = "DELETE FROM phieudatphong WHERE MaPDP = ?";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, maPDP);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -148,17 +150,45 @@ public class DatabaseConnection {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Phong(
-                        rs.getInt("MaPhong"),
-                        rs.getString("TenPhong"),
-                        rs.getInt("SoNguoi"),
-                        rs.getDouble("DonGia"),
-                        rs.getString("TrangThai"),
-                        rs.getString("MaLP"),
-                        rs.getInt("Tang")
-                    );
+                            rs.getInt("MaPhong"),
+                            rs.getString("TenPhong"),
+                            rs.getInt("SoNguoi"),
+                            rs.getDouble("DonGia"),
+                            rs.getString("TrangThai"),
+                            rs.getString("MaLP"),
+                            rs.getInt("Tang"));
                 }
             }
         }
         return null; // Trả về null nếu không tìm thấy phòng
+    }
+
+    // Thêm khách hàng mới và trả về mã khách hàng
+    public int themKhachHang(String tenKhach, Date ngaySinh, String sdt, String cmnd, String email, String gioiTinh,
+            String quocTich) throws SQLException {
+        String query = "INSERT INTO khach (TenKhach, NgaySinh, SDT, CMND, Email, GioiTinh, QuocTich) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, tenKhach);
+            stmt.setDate(2, ngaySinh);
+            stmt.setString(3, sdt);
+            stmt.setString(4, cmnd);
+            stmt.setString(5, email);
+            stmt.setString(6, gioiTinh);
+            stmt.setString(7, quocTich);
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Thêm khách hàng thất bại, không có dòng nào được thêm vào.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Thêm khách hàng thất bại, không lấy được ID.");
+                }
+            }
+        }
     }
 }

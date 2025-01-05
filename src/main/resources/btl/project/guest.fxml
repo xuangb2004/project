@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane fx:id="anpHome" prefHeight="750.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="btl.project.Guest">
    <children>
@@ -57,27 +56,27 @@
                               <Label text="Họ tên:" GridPane.rowIndex="0" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtTenKhach" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
                               <Label text="Số điện thoại:" GridPane.rowIndex="0" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerPhone" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                              <TextField fx:id="txtSDT" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
 
                               <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtEmail" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                               <Label text="CMND:" GridPane.rowIndex="1" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerCMND" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                              <TextField fx:id="txtCMND" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
                               <Label text="Quốc tịch:" GridPane.rowIndex="2" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <TextField fx:id="txtCustomerCountry" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                              <TextField fx:id="txtQuocTich" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
                               <Label text="Ngày sinh:" GridPane.rowIndex="2" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
@@ -87,7 +86,7 @@
                               <Label text="Giới tính:" GridPane.rowIndex="3" GridPane.columnIndex="0">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Label>
-                              <ComboBox fx:id="cbxGender" prefWidth="150.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                              <ComboBox fx:id="cbxGioiTinh" prefWidth="150.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
                               <Label text="Ngày nhận phòng:" GridPane.rowIndex="3" GridPane.columnIndex="2">
                                  <font><Font name="System Bold" size="14.0"/></font>
@@ -102,7 +101,7 @@
 
                            <!-- Buttons -->
                            <HBox alignment="CENTER" spacing="20.0">
-                              <Button mnemonicParsing="false" onAction="#datPhong" style="-fx-background-color: #4CAF50;" text="Đặt phòng" textFill="WHITE">
+                              <Button mnemonicParsing="false" onAction="#handleDatPhong" style="-fx-background-color: #4CAF50;" text="Đặt phòng" textFill="WHITE">
                                  <font><Font name="System Bold" size="14.0"/></font>
                               </Button>
                            </HBox>
@@ -149,7 +148,10 @@
             <!-- Tab Lịch sử đặt phòng -->
             <Tab text="Lịch Sử Đặt Phòng">
                 <content>
-                    <VBox spacing="20.0" padding="20.0">
+                    <VBox spacing="20.0">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20"/>
+                        </padding>
                         <TableView fx:id="tableLichSu" prefHeight="400.0">
                             <columns>
                                 <TableColumn fx:id="colMaDP" text="Mã ĐP" prefWidth="80.0"/>
