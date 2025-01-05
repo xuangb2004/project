@@ -133,7 +133,7 @@ DROP TABLE IF EXISTS `khach`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `khach` (
-  `MaKhach` int NOT NULL,
+  `MaKhach` int NOT NULL auto_increment,
   `TenKhach` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `NgaySinh` date NOT NULL,
   `SDT` varchar(11) NOT NULL,
@@ -248,7 +248,7 @@ DROP TABLE IF EXISTS `phieudatphong`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `phieudatphong` (
-  `MaPDP` int NOT NULL,
+  `MaPDP` int NOT NULL auto_increment,
   `MaPhong` int DEFAULT NULL,
   `MaKhach` int DEFAULT NULL,
   `MaNV` int DEFAULT NULL,
