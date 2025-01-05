@@ -9,6 +9,22 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 public class RegisterController {
+  public static class Account {
+    static private String username;
+    static private String password;
+    public static void setAccount(String username, String password) {
+      Account.username = username;
+      Account.password = password;
+    }
+
+        public static String getUsername() {
+            return username;
+        }
+
+        public static String getPassword() {
+            return password;
+        }
+  }
   @FXML
   private TextField username;
   @FXML
@@ -44,8 +60,9 @@ public class RegisterController {
     if (username.getText().isEmpty() || password.getText().isEmpty() || confirmPassword.getText().isEmpty()) {
       warning.setText("Vui lòng nhập đầy đủ thông tin.");
     } else if (password.getText().equals(confirmPassword.getText())) {
-      switch (Auth.register(username.getText(), password.getText())) {
+      switch (Auth.check(username.getText(), password.getText())) {
         case 0 -> {
+          Account.setAccount(username.getText(), password.getText());
           App.setRoot("register-info");
         }
         case 1 -> warning.setText("Tên tài khoản đã được sử dụng.");
