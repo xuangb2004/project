@@ -1,196 +1,374 @@
 package btl.project;
 
-import btl.database.DatabaseConnection;
+import btl.classes.Khach;
 import btl.classes.Phong;
+import btl.classes.DichVu;
+import btl.classes.PhieuDV;
+import btl.database.DatabaseConnection;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.ResourceBundle;
 
-public class Guest {
+public class Guest implements Initializable {
+    @FXML
+    private AnchorPane anpTab;
 
-    private DatabaseConnection databaseConnection;
+    // TableViews
+    @FXML
+    private TableView<Phong> tablePhong;
+    @FXML
+    private TableView<DichVu> tableDichVu;
+    @FXML
+    private TableView<PhieuDV> tableGiaoDich;
 
+    // Columns cho bảng Phòng
     @FXML
-    private TableView<Phong> tablePhong; // Bảng phòng
+    private TableColumn<Phong, Integer> colMaPhong;
     @FXML
-    private TableColumn<Phong, Integer> colMaPhong; // Cột mã phòng
+    private TableColumn<Phong, String> colTenPhong;
     @FXML
-    private TableColumn<Phong, String> colTenPhong; // Cột tên phòng
+    private TableColumn<Phong, Integer> colSoNguoi;
     @FXML
-    private TableColumn<Phong, Integer> colSoNguoi; // Cột số người
+    private TableColumn<Phong, Double> colDonGia;
     @FXML
-    private TableColumn<Phong, Double> colDonGia; // Cột đơn giá
+    private TableColumn<Phong, String> colTrangThai;
     @FXML
-    private TableColumn<Phong, String> colTrangThai; // Cột trạng thái
+    private TableColumn<Phong, String> colLoaiPhong;
     @FXML
-    private TableColumn<Phong, String> colMaLP; // Cột mã loại phòng
-    @FXML
-    private TableColumn<Phong, Integer> colTang; // Cột tầng
+    private TableColumn<Phong, Integer> colTang;
 
+    // Columns cho bảng Dịch vụ
     @FXML
-    private Button btnRoom; // Nút "Phòng"
+    private TableColumn<DichVu, String> colMaDV;
     @FXML
-    private Button btnSignout; // Nút "Đăng xuất"
+    private TableColumn<DichVu, String> colTenDV;
     @FXML
-    private DatePicker dpCheckin, dpCheckout; // Các trường chọn ngày
+    private TableColumn<DichVu, Double> colGiaDV;
     @FXML
-    private Label lblRoomDetails; // Các label để hiển thị chi tiết phòng
-    @FXML
-    private Label lblErrorMessage; // Hiển thị thông báo lỗi
-    @FXML
-    private Label lblSuccessMessage; // Hiển thị thông báo thành công
+    private TableColumn<DichVu, String> colMoTaDV;
 
-    private int maKhach; // Mã khách hàng (giả sử là ID của khách hàng đã đăng nhập)
-    private double tongTien; // Biến lưu trữ tổng tiền
+    // Columns cho bảng Giao dịch
+    @FXML
+    private TableColumn<PhieuDV, Integer> colMaGD;
+    @FXML
+    private TableColumn<PhieuDV, String> colLoaiGD;
+    @FXML
+    private TableColumn<PhieuDV, Date> colNgayGD;
+    @FXML
+    private TableColumn<PhieuDV, Double> colTongTien;
+    @FXML
+    private TableColumn<PhieuDV, String> colTrangThaiGD;
 
-    // Constructor mặc định (không tham số)
-    public Guest() {
+    // Form controls
+    @FXML
+    private TextField txtCustomerName;
+    @FXML
+    private TextField txtCustomerPhone;
+    @FXML
+    private TextField txtCustomerEmail;
+    @FXML
+    private TextField txtCustomerCMND;
+    @FXML
+    private TextField txtCustomerCountry;
+    @FXML
+    private TextField txtSoLuongDV;
+    @FXML
+    private DatePicker dpNgaySinh;
+    @FXML
+    private ComboBox<String> cbxGender;
+    @FXML
+    private DatePicker dpCheckin;
+    @FXML
+    private DatePicker dpCheckout;
+
+    private DatabaseConnection db;
+    private int maKhach;
+    private int maPhong;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         try {
-            databaseConnection = new DatabaseConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void initialize() {
-        System.out.println("Controller đã được khởi tạo"); // Debug
-        try {
-            // Thiết lập các cell value factory cho các cột
-            colMaPhong.setCellValueFactory(new PropertyValueFactory<>("maPhong"));
-            colTenPhong.setCellValueFactory(new PropertyValueFactory<>("tenPhong"));
-            colSoNguoi.setCellValueFactory(new PropertyValueFactory<>("soNguoi"));
-            colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
-            colTrangThai.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
-            colMaLP.setCellValueFactory(new PropertyValueFactory<>("maLP"));
-            colTang.setCellValueFactory(new PropertyValueFactory<>("tang"));
-            
-            hienThiPhong();
+            db = new DatabaseConnection();
+            setupGenderComboBox();
+            setupTableColumns();
+            loadPhongTrong();
+            loadDichVu();
+            loadPhieuDV();
         } catch (SQLException e) {
-            e.printStackTrace();
+            showError("Lỗi", "Không thể kết nối đến database: " + e.getMessage());
         }
     }
 
-    // Hiển thị danh sách phòng trống
-    public void hienThiPhong() throws SQLException {
-        List<Phong> danhSachPhong = databaseConnection.getPhongTrong();
-        System.out.println("Số phòng trống: " + danhSachPhong.size()); // Debug
+    private void setupGenderComboBox() {
+        cbxGender.setItems(FXCollections.observableArrayList("Nam", "Nữ"));
+    }
 
-        if (danhSachPhong.isEmpty()) {
-            lblErrorMessage.setText("Hiện tại không có phòng trống.");
-        } else {
-            lblErrorMessage.setText(""); // Xóa thông báo lỗi nếu có
-            for (Phong p : danhSachPhong) {
-                System.out.println(p.getTenPhong()); // Debug
+    private void setupTableColumns() {
+        // Setup columns cho bảng Phòng
+        colMaPhong.setCellValueFactory(new PropertyValueFactory<>("maPhong"));
+        colTenPhong.setCellValueFactory(new PropertyValueFactory<>("tenPhong"));
+        colSoNguoi.setCellValueFactory(new PropertyValueFactory<>("soNguoi"));
+        colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
+        colTrangThai.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
+        colLoaiPhong.setCellValueFactory(new PropertyValueFactory<>("maLP"));
+        colTang.setCellValueFactory(new PropertyValueFactory<>("tang"));
+
+        // Setup columns cho bảng Dịch vụ
+        colMaDV.setCellValueFactory(new PropertyValueFactory<>("maDV"));
+        colTenDV.setCellValueFactory(new PropertyValueFactory<>("tenDV"));
+        colGiaDV.setCellValueFactory(new PropertyValueFactory<>("donGiaDV"));
+        colMoTaDV.setCellValueFactory(new PropertyValueFactory<>("maLoaiDV"));
+
+        // Setup columns cho bảng Phiếu dịch vụ
+        colMaGD.setCellValueFactory(new PropertyValueFactory<>("maPhieuDV"));
+        colLoaiGD.setCellValueFactory(new PropertyValueFactory<>("tenDV"));
+        colNgayGD.setCellValueFactory(new PropertyValueFactory<>("ngaySD"));
+        colTongTien.setCellValueFactory(new PropertyValueFactory<>("tienDV"));
+        colTrangThaiGD.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
+    }
+
+    private void loadPhongTrong() throws SQLException {
+        String query = "SELECT * FROM Phong WHERE TrangThai = N'Trống'";
+        ObservableList<Phong> phongList = FXCollections.observableArrayList();
+
+        try (Statement stmt = db.getConnection().createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                Phong phong = new Phong(
+                        rs.getInt("MaPhong"),
+                        rs.getString("TenPhong"),
+                        rs.getInt("SoNguoi"),
+                        rs.getDouble("DonGia"),
+                        rs.getString("TrangThai"),
+                        rs.getString("MaLP"),
+                        rs.getInt("Tang"));
+                phongList.add(phong);
             }
-            tablePhong.getItems().setAll(danhSachPhong);
         }
+        tablePhong.setItems(phongList);
     }
 
-    // Xử lý sự kiện khi nhấn nút "Phòng"
+    private void loadDichVu() throws SQLException {
+        String query = "SELECT * FROM DichVu";
+        ObservableList<DichVu> dichVuList = FXCollections.observableArrayList();
+
+        try (Statement stmt = db.getConnection().createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                DichVu dichVu = new DichVu(
+                        rs.getString("MaDV"),
+                        rs.getString("TenDV"),
+                        rs.getDouble("DonGiaDV"),
+                        rs.getString("MaLoaiDV"));
+                dichVuList.add(dichVu);
+            }
+        }
+        tableDichVu.setItems(dichVuList);
+    }
+
+    private void loadPhieuDV() throws SQLException {
+        String query = "SELECT pdv.*, dv.TenDV FROM PhieuDV pdv JOIN DichVu dv ON pdv.MaDV = dv.MaDV WHERE pdv.MaP = ?";
+        System.out.println("Query: " + query);
+        System.out.println("MaPhong: " + maPhong);
+        ObservableList<PhieuDV> phieuDVList = FXCollections.observableArrayList();
+
+        try (PreparedStatement pstmt = db.getConnection().prepareStatement(query)) {
+            pstmt.setInt(1, maPhong);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                PhieuDV phieuDV = new PhieuDV(
+                        rs.getInt("MaPhieuDV"),
+                        rs.getInt("MaP"),
+                        rs.getString("MaDV"),
+                        rs.getString("TienDV"),
+                        rs.getInt("Soluong"),
+                        rs.getDate("NgaySD"));
+                phieuDVList.add(phieuDV);
+            }
+        }
+        tableGiaoDich.setItems(phieuDVList);
+    }
+
     @FXML
-    public void xuLyDatPhong() {
+    private void datPhong() {
         Phong phongDaChon = tablePhong.getSelectionModel().getSelectedItem();
-        if (phongDaChon != null) {
-            // Hiển thị chi tiết phòng đã chọn
-            lblRoomDetails.setText("Tên phòng: " + phongDaChon.getTenPhong() + "\n" +
-                                    "Giá phòng: " + phongDaChon.getDonGia());
-            // Hiển thị các thông tin chọn ngày (check-in, check-out)
-            dpCheckin.setValue(LocalDate.now());
-            dpCheckout.setValue(LocalDate.now().plusDays(1)); // Mặc định ngày check-out là một ngày sau ngày check-in
-            lblErrorMessage.setText(""); // Xóa thông báo lỗi nếu có
-        } else {
-            lblErrorMessage.setText("Vui lòng chọn một phòng.");
+        if (phongDaChon == null) {
+            showError("Lỗi", "Vui lòng chọn phòng");
+            return;
         }
-    }
 
-    // Đặt phòng khi người dùng điền thông tin và chọn ngày
-    @FXML
-    public void datPhong() {
+        if (!validateInput()) {
+            return;
+        }
+
         try {
-            Phong phongDaChon = tablePhong.getSelectionModel().getSelectedItem();
-            if (phongDaChon == null) {
-                lblErrorMessage.setText("Vui lòng chọn một phòng trước khi đặt.");
-                return;
-            }
+            // Lưu thông tin khách hàng
+            String insertKhachQuery = "INSERT INTO Khach (TenKhach, NgaySinh, SDT, CMND, Email, GioiTinh, QuocTich) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            LocalDate checkinDate = dpCheckin.getValue();
-            LocalDate checkoutDate = dpCheckout.getValue();
-            
-            if (checkinDate == null || checkoutDate == null) {
-                lblErrorMessage.setText("Vui lòng chọn ngày nhận và trả phòng.");
-                return;
-            }
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(insertKhachQuery,
+                    Statement.RETURN_GENERATED_KEYS)) {
+                pstmt.setString(1, txtCustomerName.getText());
+                pstmt.setDate(2, Date.valueOf(dpNgaySinh.getValue()));
+                pstmt.setString(3, txtCustomerPhone.getText());
+                pstmt.setString(4, txtCustomerCMND.getText());
+                pstmt.setString(5, txtCustomerEmail.getText());
+                pstmt.setString(6, cbxGender.getValue());
+                pstmt.setString(7, txtCustomerCountry.getText());
 
-            if (checkoutDate.isBefore(checkinDate)) {
-                lblErrorMessage.setText("Ngày trả phòng không được trước ngày nhận phòng.");
-                return;
-            }
-
-            int maNV = 1;
-            maKhach = 1;
-            Timestamp ngayDat = Timestamp.valueOf(checkinDate.atStartOfDay());
-            Timestamp traPhong = Timestamp.valueOf(checkoutDate.atStartOfDay());
-            long soNgay = checkoutDate.toEpochDay() - checkinDate.toEpochDay();
-            double donGia = phongDaChon.getDonGia();
-
-            Connection conn = databaseConnection.getConnection();
-            conn.setAutoCommit(false);
-
-            try {
-                String sqlPhieu = "INSERT INTO phieudatphong (MaPhong, MaKhach, MaNV, NgayDatPhong, TraPhong, DonGiaThue) VALUES (?, ?, ?, ?, ?, ?)";
-                PreparedStatement pstmt = conn.prepareStatement(sqlPhieu);
-                pstmt.setInt(1, phongDaChon.getMaPhong());
-                pstmt.setInt(2, maKhach);
-                pstmt.setInt(3, maNV);
-                pstmt.setTimestamp(4, ngayDat);
-                pstmt.setTimestamp(5, traPhong);
-                pstmt.setDouble(6, donGia);
                 pstmt.executeUpdate();
-                pstmt.close();
 
-                String sqlUpdatePhong = "UPDATE phong SET TrangThai = 'Đang sử dụng' WHERE MaPhong = ?";
-                pstmt = conn.prepareStatement(sqlUpdatePhong);
-                pstmt.setInt(1, phongDaChon.getMaPhong());
-                pstmt.executeUpdate();
-                pstmt.close();
-
-                conn.commit();
-                tongTien += donGia; // Cộng dồn đơn giá vào tổng tiền
-                lblSuccessMessage.setText("Đặt phòng thành công! Tổng tiền: " + tongTien + " VND");
-                lblErrorMessage.setText("");
-                
-                hienThiPhong();
-
-            } catch (SQLException e) {
-                if (conn != null) {
-                    try {
-                        conn.rollback();
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        maKhach = generatedKeys.getInt(1);
                     }
                 }
-                throw e;
             }
 
+            // Cập nhật trạng thái phòng và lưu mã phòng
+            String updatePhongQuery = "UPDATE Phong SET TrangThai = N'Đã đặt' WHERE MaPhong = ?";
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(updatePhongQuery)) {
+                maPhong = phongDaChon.getMaPhong();
+                pstmt.setInt(1, maPhong);
+                pstmt.executeUpdate();
+            }
+
+            showSuccess("Thành công", "Đặt phòng thành công!");
+            loadPhongTrong();
+            loadPhieuDV();
+            clearFields();
         } catch (SQLException e) {
-            lblErrorMessage.setText("Lỗi khi đặt phòng: " + e.getMessage());
-            System.out.println("Lỗi SQL: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            lblErrorMessage.setText("Có lỗi xảy ra: " + e.getMessage());
-            System.out.println("Lỗi chung: " + e.getMessage());
-            e.printStackTrace();
+            showError("Lỗi", "Không thể đặt phòng: " + e.getMessage());
         }
     }
 
-    // Đặt lại tổng tiền khi thoát ứng dụng
-    public void resetTongTien() {
-        tongTien = 0;
-        System.out.println("Tổng tiền đã được đặt lại về 0."); // Debug
+    @FXML
+    private void datDichVu() {
+        DichVu dichVuDaChon = tableDichVu.getSelectionModel().getSelectedItem();
+        if (dichVuDaChon == null) {
+            showError("Lỗi", "Vui lòng chọn dịch vụ");
+            return;
+        }
+
+        if (txtSoLuongDV.getText().isEmpty()) {
+            showError("Lỗi", "Vui lòng nhập số lượng");
+            return;
+        }
+
+        try {
+            int soLuong = Integer.parseInt(txtSoLuongDV.getText());
+            double tongTien = soLuong * dichVuDaChon.getDonGiaDV();
+            String tienDV = String.valueOf(tongTien);
+
+            String insertPhieuDVQuery = "INSERT INTO PhieuDV (MaP, MaDV, TienDV, Soluong, NgaySD) " +
+                    "VALUES (?, ?, ?, ?, CURDATE())";
+
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(insertPhieuDVQuery)) {
+                pstmt.setInt(1, maPhong);
+                pstmt.setString(2, dichVuDaChon.getMaDV());
+                pstmt.setString(3, tienDV);
+                pstmt.setInt(4, soLuong);
+                pstmt.executeUpdate();
+            }
+
+            showSuccess("Thành công", "Đặt dịch vụ thành công!");
+            loadPhieuDV();
+            txtSoLuongDV.clear();
+        } catch (SQLException e) {
+            showError("Lỗi", "Không thể đặt dịch vụ: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            showError("Lỗi", "Số lượng không hợp lệ");
+        }
     }
 
+    @FXML
+    private void yeuCauHuyGiaoDich() {
+        PhieuDV phieuDaChon = tableGiaoDich.getSelectionModel().getSelectedItem();
+        if (phieuDaChon == null) {
+            showError("Lỗi", "Vui lòng chọn phiếu cần hủy");
+            return;
+        }
+
+        try {
+            String updateQuery = "DELETE FROM PhieuDV WHERE MaPhieuDV = ?";
+            try (PreparedStatement pstmt = db.getConnection().prepareStatement(updateQuery)) {
+                pstmt.setInt(1, phieuDaChon.getMaPhieuDV());
+                pstmt.executeUpdate();
+            }
+
+            showSuccess("Thành công", "Đã hủy phiếu dịch vụ!");
+            loadPhieuDV();
+        } catch (SQLException e) {
+            showError("Lỗi", "Không thể hủy phiếu: " + e.getMessage());
+        }
+    }
+
+    private boolean validateInput() {
+        StringBuilder errors = new StringBuilder();
+
+        if (txtCustomerName.getText().isEmpty())
+            errors.append("Vui lòng nhập tên khách hàng\n");
+        if (txtCustomerPhone.getText().isEmpty())
+            errors.append("Vui lòng nhập số điện thoại\n");
+        if (txtCustomerCMND.getText().isEmpty())
+            errors.append("Vui lòng nhập CMND\n");
+        if (dpNgaySinh.getValue() == null)
+            errors.append("Vui lòng chọn ngày sinh\n");
+        if (cbxGender.getValue() == null)
+            errors.append("Vui lòng chọn giới tính\n");
+        if (dpCheckin.getValue() == null)
+            errors.append("Vui lòng chọn ngày nhận phòng\n");
+        if (dpCheckout.getValue() == null)
+            errors.append("Vui lòng chọn ngày trả phòng\n");
+
+        if (errors.length() > 0) {
+            showError("Lỗi", errors.toString());
+            return false;
+        }
+        return true;
+    }
+
+    private void clearFields() {
+        txtCustomerName.clear();
+        txtCustomerPhone.clear();
+        txtCustomerEmail.clear();
+        txtCustomerCMND.clear();
+        txtCustomerCountry.clear();
+        dpNgaySinh.setValue(null);
+        cbxGender.setValue(null);
+        dpCheckin.setValue(null);
+        dpCheckout.setValue(null);
+    }
+
+    @FXML
+    private void PressSignOut() throws IOException {
+        App.setRoot("login");
+    }
+
+    private void showError(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showSuccess(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

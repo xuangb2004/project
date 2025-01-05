@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class PhieuDV {
     private int MaPhieuDV;
-    private int MaP;
+    private int MaPhong;
     private String TenP;
     private String MaDV;
     private String TenDV;
@@ -15,10 +15,10 @@ public class PhieuDV {
     private int Soluong;
     private Date NgaySD;
 
-    public PhieuDV(int maPhieuDV, int maP, String tenP, String maDV, String tenDV, String giaDV, String tienDV,
+    public PhieuDV(int maPhieuDV, int maPhong, String tenP, String maDV, String tenDV, String giaDV, String tienDV,
             int soluong, Date ngaySD) {
         MaPhieuDV = maPhieuDV;
-        MaP = maP;
+        MaPhong = maPhong;
         TenP = tenP;
         MaDV = maDV;
         TenDV = tenDV;
@@ -28,20 +28,20 @@ public class PhieuDV {
         NgaySD = ngaySD;
     }
 
-    public PhieuDV(int maPhieuDV, int maP, String maDV, String tienDV, int soluong, Date ngaySD) {
+    public PhieuDV(int maPhieuDV, int maPhong, String maDV, String tienDV, int soluong, Date ngaySD) {
         MaPhieuDV = maPhieuDV;
-        MaP = maP;
+        MaPhong = maPhong;
         MaDV = maDV;
         TienDV = tienDV;
         Soluong = soluong;
         NgaySD = ngaySD;
     }
 
-    public PhieuDV(int maPhieuDV, int maP, String maDV, String tenDV, String maLDV, String tenLDV, String giaDV,
+    public PhieuDV(int maPhieuDV, int maPhong, String maDV, String tenDV, String maLDV, String tenLDV, String giaDV,
             String tienDV, int soluong, Date ngaySD) {
         MaPhieuDV = maPhieuDV;
         MaDV = maDV;
-        MaP = maP;
+        MaPhong = maPhong;
         TenDV = tenDV;
         MaLDV = maLDV;
         TenLDV = tenLDV;
@@ -99,12 +99,12 @@ public class PhieuDV {
         MaPhieuDV = maPhieuDV;
     }
 
-    public int getMaP() {
-        return MaP;
+    public int getMaPhong() {
+        return MaPhong;
     }
 
-    public void setMaP(int maP) {
-        MaP = maP;
+    public void setMaPhong(int maPhong) {
+        MaPhong = maPhong;
     }
 
     public String getMaDV() {
