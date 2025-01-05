@@ -141,7 +141,7 @@ public class QL_KH extends Application {
         else
             gioitinh = rbNam.getText();
 
-        db.updateKHDB(maKH, hoten, ngaysinh, cmnd, email, gioitinh, quoctich, sdt);
+        db.updateKHDB(maKH, hoten, ngaysinh, sdt, cmnd, email, gioitinh, quoctich);
         JOptionPane.showMessageDialog(null, "Sửa thành công !");
         ShowQuest();
 
@@ -160,8 +160,6 @@ public class QL_KH extends Application {
             rbNu.setSelected(true);
         rbNam.setSelected(false);
     }
-
-    // tuần 10 chưa chưa bk nữa lên wen
 
     @FXML
     void SearchKH(KeyEvent event) throws ClassNotFoundException {
@@ -260,21 +258,21 @@ public class QL_KH extends Application {
             int STT = 1;
             while (db.rs.next()) {
 
-                int MaKH = db.rs.getInt("MaKHACH");
+                int MaKH = db.rs.getInt("maKhach");
 
-                String TenKH = db.rs.getString("TenKHACH");
+                String TenKH = db.rs.getString("tenKhach");
 
                 Date Ngaysinh = db.rs.getDate("NgaySinh");
 
-                String SDT = db.rs.getString("SDT");
+                String SDT = db.rs.getString("sdt");
 
-                String Email = db.rs.getString("Email");
+                String Email = db.rs.getString("email");
 
-                String CMND = db.rs.getString("CMND");
+                String CMND = db.rs.getString("cmnd");
 
-                String QuocTich = db.rs.getString("QuocTich");
+                String QuocTich = db.rs.getString("quocTich");
 
-                String GioiTinh = db.rs.getString("GioiTinh");
+                String GioiTinh = db.rs.getString("gioiTinh");
 
                 Khach khach = new Khach(STT, MaKH, TenKH, SDT, Email, CMND, QuocTich, GioiTinh, Ngaysinh);
                 KHList.add(khach);
@@ -295,14 +293,14 @@ public class QL_KH extends Application {
 
     void ConfigTable() {
         Index_table.setCellValueFactory(new PropertyValueFactory<Khach, Integer>("STT"));
-        IDKHtable.setCellValueFactory(new PropertyValueFactory<Khach, Integer>("MaKHACH"));
-        NameKHtable.setCellValueFactory(new PropertyValueFactory<Khach, String>("TenKHACH"));
-        WasBorn_table.setCellValueFactory(new PropertyValueFactory<Khach, Date>("NgaySinh"));
-        GioiTinh_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("GioiTinh"));
-        Email_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("Email"));
-        CMND_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("CMND"));
-        SDT_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("SDT"));
-        QuocTich_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("QuocTich"));
+        IDKHtable.setCellValueFactory(new PropertyValueFactory<Khach, Integer>("maKhach"));
+        NameKHtable.setCellValueFactory(new PropertyValueFactory<Khach, String>("tenKhach"));
+        WasBorn_table.setCellValueFactory(new PropertyValueFactory<Khach, Date>("ngaySinh"));
+        GioiTinh_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("gioiTinh"));
+        Email_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("email"));
+        CMND_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("cmnd"));
+        SDT_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("sdt"));
+        QuocTich_table.setCellValueFactory(new PropertyValueFactory<Khach, String>("quocTich"));
     }
 
     void ShowHistory() throws IOException {
@@ -335,24 +333,31 @@ public class QL_KH extends Application {
             return;
         }
 
-        String sql = String.format("SELECT * FROM phieudatphong");
+        String sql = String.format("SELECT pdp.MaPDP, pdp.MaPhong, pdp.TenPhong, pdp.TenLP, " +
+                "k.TenKhach, pdp.NgayDatPhong, pdp.TraPhong, " +
+                "pdp.DonGiaPhong, pdp.DonGiaThue " +
+                "FROM phieudatphong pdp " +
+                "JOIN khach k ON pdp.MaKhach = k.MaKhach " +
+                "WHERE pdp.MaKhach = ?");
 
         PreparedStatement statement = db.conn.prepareStatement(sql);
+        statement.setInt(1, tblKH.getSelectionModel().getSelectedItem().getMaKhach());
         db.rs = statement.executeQuery();
 
         List<PhieuDatPhong> PDPList = new ArrayList<PhieuDatPhong>();
 
         while (db.rs.next()) {
-            if (tblKH.getSelectionModel().getSelectedItem().getMaKhach() == db.rs.getInt("Mã Khách")) {
-                PhieuDatPhong pdp = new PhieuDatPhong(db.rs.getInt("Mã PDP"), db.rs.getInt("Mã Phòng"),
-                        db.rs.getString("Tên Phòng"), db.rs.getString("Tên LP"),
-                        db.rs.getString("Khách"), db.rs.getDate("Ngày đặt"),
-                        db.rs.getDate("Ngày trả"), db.rs.getBigDecimal("Giá Phòng").toPlainString(),
-                        db.rs.getBigDecimal("Tiền trả").toPlainString());
-                PDPList.add(pdp);
-                System.out.println(pdp.getTenKHACH() + pdp.getTenP() + pdp.getTienTra());
-            }
-
+            PhieuDatPhong pdp = new PhieuDatPhong(
+                    db.rs.getInt("MaPDP"),
+                    db.rs.getInt("MaPhong"),
+                    db.rs.getString("TenPhong"),
+                    db.rs.getString("TenLP"),
+                    db.rs.getString("TenKhach"),
+                    db.rs.getDate("NgayDatPhong"),
+                    db.rs.getDate("TraPhong"),
+                    db.rs.getBigDecimal("DonGiaPhong").toPlainString(),
+                    db.rs.getBigDecimal("DonGiaThue").toPlainString());
+            PDPList.add(pdp);
         }
         phieuDatPhongsList = FXCollections.observableArrayList(PDPList);
         ShowHistory();

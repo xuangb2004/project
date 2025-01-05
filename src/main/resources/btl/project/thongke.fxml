@@ -17,11 +17,11 @@
       </Label>
       <TableView fx:id="tbl_HoaDon" layoutX="2.0" layoutY="314.0" prefHeight="587.0" prefWidth="1314.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="4.0">
         <columns>
-          <TableColumn fx:id="tb_MaHD" prefWidth="78.39999079704285" text="Mã HD" />
-          <TableColumn fx:id="tb_TenPhong" prefWidth="211.19996643066406" text="Phòng" />
-            <TableColumn fx:id="tb_NgayIn" prefWidth="211.19996643066406" text="Ngày in" />
-            <TableColumn fx:id="tb_NVlap" prefWidth="211.19996643066406" text="Nhân viên lập" />
-            <TableColumn fx:id="tb_TongTien" prefWidth="211.19996643066406" text="Tổng tiền" />
+          <TableColumn fx:id="tb_MaHD" prefWidth="220.0" text="Mã HD" />
+          <TableColumn fx:id="tb_TenPhong" prefWidth="220.0" text="Phòng" />
+            <TableColumn fx:id="tb_NgayIn" prefWidth="220.0" text="Ngày in" />
+            <TableColumn fx:id="tb_NVlap" prefWidth="220.0" text="Nhân viên lập" />
+            <TableColumn fx:id="tb_TongTien" prefWidth="220.0" text="Tổng tiền" />
         </columns>
       </TableView>
       <DatePicker fx:id="dtpFromDate" layoutX="128.0" layoutY="79.0" />
